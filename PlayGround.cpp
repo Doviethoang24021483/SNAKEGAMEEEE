@@ -1,10 +1,38 @@
 
 #include<iostream>
 #include "Playground.h"
+#include<cassert>
+#include<vector>
 using namespace std;
 
-//Ham khoi tao dung Member Initialization List
  PlayGround::PlayGround(int width, int height)
- : squares(height, vector<CellType>(width, CELL_EMPTY)) ,// khoi tao mang san choi ban dau co gt empty
-   snake(this),// Goi toi ham khoi tao Snake , truyen doi tuong PlayGround hien tai vao
+  :width(width),
+  height (height),
+   squares (height,vector<CellType>(width, CELL_EMPTY)),
+    status(GAME_RUNNING),
+    isStop (false)
+            {
+            }
+ int PlayGround::getWidth() const{
+  return squares[0].size();
+ }
+ int PlayGround::getHeight() const{
+  return squares.size();
+ }
 
+ CellType PlayGround::getCellState(Position pos) const{
+   assert(pos.isInsideBox(0,0,getWidth(),getHeight()));
+   return squares[pos.y][pos.x];
+ }
+ int PlayGround::changeCellState(Position pos, CellType type){
+  assert(pos.isInsideBox(0,0,getWidth(),getHeight()));
+  return squares[pos.y][pos.x]=type;
+ }
+ bool PlayGround::checkPosition(Position pos){
+  if(!pos.isInsideBox(0,0,getWidth(),getHeight()))
+    return false;
+  return true;
+ }
+ bool PlayGround::isGameRunning() const{
+   return status == GAME_RUNNING && !isStop;
+ }
