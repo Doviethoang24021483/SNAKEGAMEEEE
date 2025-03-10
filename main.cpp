@@ -1,94 +1,96 @@
- //#include<iostream>
- //#include<chrono>
- //#include<SDL.h>
- //#include "SDL_utils.h"
- //#define CLOCK_NOW chrono::system_clock::now
- //typedef chrono::duration<double> ElapsedTime;
- //const double STEP_DELAY = 0.5;// pham vi toan cuc, truy cap dc moi noi trong ma cua ban
- //const int BOARD_WIDTH = 30;
- //const int BOARD_HEIGHT = 20;
- //void renderSplashScreen();
- //void renderGamePlay(Painter&, const PlayGround& playGround);
- //void renderGameOver(Painter&, const PlayGround& playGround);
- //UserInput interpretEvent(SDL_Event e);
- //void updateRankingTable(const PlayGround& playGround);
- //Game //Lop dieu khien logic cua game
- //Userinput//cachanhdongcuanguoichoi
-// enum UserInput{
-   // NO_INPUT = 0,
-   // KEY_UP,KEY_DOWN,KEY_LEFT,_KEY_RIGHT
-// };
- //int main(int argc, char* argv[])
- //{
- //   SDL_Window* window;
- //   SDL_Renderer* renderer;
-//    initSDL(window, renderer);
- // Your drawing code here
- // use SDL_RenderPresent(renderer) to show it
-    //*/ Khoi tao
-    //1. Hien thi man hinh chao khi bat dau tro choi
-    //2. Tao man hinh tro choi voi kich thuoc (chieu rong,chieucao)xac dinh.
-     //Khoi tao cac bien quan trong nhu vi tri ban dau cua ran,thuc an,diemso
-   // */ Vong lap chinh
-    // vong lap vo tan lap di lap lai cho den khi tro choi ket thuc
-    // nhan dau vao tu nguoi choi(vi du: phim mui ten, nut dieu khien)
-    // Thay doi huong di chuyen cua ran dua tren dau vao cua nguoi choi
-    // Kiem tra xem da den thoi diem de ran di chuyen 1 buoc chua
-      // Thuc hien cac hanh dong can thiet de di chuyen tro choi sang trang thai tiep
-         // Di chuyen ran theo huong hien tai .Than ran theo sau dau
-         // Tao thuc an(cherry) ngau nhien tren man hinh
-    // Xoa man hinh cu va ve lai cac thanh phan cua tro choi ( bao gom ca ran) o vi tri
-    // trong moi khung hinh de tao cam giac chuyen dong
-    // Luu thoi diem hien tai
-   //  renderSplashScreen();
-// Game game(BOARD_WIDTH, BOARD_HEIGHT);//Tao mot doi tuong game thuoc lop Game .lop nay co
- //kha nang chua tat ca cac logic va du lieu cua tro choi(vi tri ran, thuc an, kich thuoc bang)
- //SDL_Event e;// Luu tru cac su kien tu SDl
- //renderGamePlay(renderer, game);// Ve trang thai ban dau cua tro choi len man hinh
- //auto start = CLOCK_NOW();
- //while (game.isRunning()) {
- //   while (SDL_PollEvent(&e) != 0) {//Kiem tra xem co su kien nao tu nguoi dung hay khong.Neu co no luu tru sk vao e va tra ve khac 0
-    //    interpretEvent(e); // Ham nay dien giai su kien va thuc hien cac hanh dong tuong ung (vi du doi hg di chuyen cua ran)
-   // } // non-blocking event detection
-    // game logic here
- //   auto end = CLOCK_NOW();// Luu thoi diem hien tai, phai dc lay truoc khi cap nhat trang thai.
-// ElapsedTime elapsed = end-start;// thoi gian troi qua
- //if (elapsed.count() > STEP_DELAY) {//so voi 1 gt hang so de xem co can di chuyen buoc nua chx
- //   game.nextStep();//Goij ham next step cua doi tuong game.Ham thuc hien viec di chuyen tro sang trang thai tiep
- //   renderGamePlay(renderer, game);//ve lai trang thai tro choi len man hinh
- //   start = end;//cap nhat start bang end
- //   SDL_Delay(1);// Tam dung chuong trinh trong 1miligiay giam tai CPU vi SDL_POLLEvent tieu thu nhieu tai nguyen
-    // to prevent high CPU usage because of SDL_PollEvent()
- //}
- //renderGameOver(renderer, game);//Hien thi man hinh ket thuc tro choi
- //updateRankingTable(playGround);//Cap nhat bang xep hang
-
-  //  waitUntilKeyPressed();
-  //  quitSDL(window, renderer);
-// return 0;
-// }#include <iostream>
-#include <SDL.h>
-#include "SDL_utils.h"
+#include<SDL.h>
+#include<iostream>
+#include "Position.h"
 #include "PlayGround.h"
+#include "SDL_utils.h"
+#include "Snake.h"
 using namespace std;
-
-int main(int argc, char* argv[]) {
-    SDL_Window* window ;
-    SDL_Renderer* renderer ;
-    initSDL(window, renderer);
-    int WIDTH=20;
-    int HEIGHT =20;
-    PlayGround playGround(WIDTH, HEIGHT);
-
-    // In thử trạng thái sân chơi
-    for (int y = 0; y < playGround.getHeight(); ++y) {
-        for (int x = 0; x < playGround.getWidth(); ++x) {
-            Position pos(x, y);
-              cout << playGround.getCellState(pos) << " ";
-        }
-        cout << endl;
+const int CELL_SIZE = 30;//Kich thuoc moi o vuong
+//Ham ve nen mau tim va cac o vuong mau trang
+void drawGrid(SDL_Renderer* renderer){
+  //dat mau nen tim
+  SDL_SetRenderDrawColor(renderer,128,0,128,255);
+  // ve mau tim len toan man hinh
+  SDL_RenderClear(renderer);
+  // dat mau cho o vuong
+  SDL_SetRenderDrawColor(renderer,255,255,255,255);
+  //ve cac o vuong theo luoi
+  for( int x = 0; x < SCREEN_WIDTH; x+=CELL_SIZE){
+    for(int y = 0 ; y < SCREEN_HEIGHT; y+=CELL_SIZE){
+        //Dinh nghia o vuong sap duoc ve
+        SDL_Rect cell = {x,y,CELL_SIZE,CELL_SIZE};
+        //ve duong vien hinh vuong
+        SDL_RenderDrawRect(renderer,&cell);
     }
+  }
+  SDL_RenderPresent(renderer);
+}
+void drawSnake(SDL_Renderer* renderer, int x, int y){
+ SDL_SetRenderDrawColor(renderer,255,0,0,255);//mau do
+ SDL_Rect rect = { x, y, CELL_SIZE,CELL_SIZE};
+ //Ve hinh tron
+ for ( int i = 0 ; i < CELL_SIZE; i++){
+    for ( int j = 0 ; j < CELL_SIZE; j++)
+    {
+        int dx= CELL_SIZE/2 - i;
+        int dy= CELL_SIZE/2- j;
+        if((dx*dx + dy*dy)<=(CELL_SIZE/2)*((CELL_SIZE/2))){
+            SDL_RenderDrawPoint(renderer,x+i,y+j);
+        }
+    }
+ }
+}
+void drawCherry(SDL_Renderer* renderer, int x, int y){
+    SDL_SetRenderDrawColor(renderer,255,165,0,255);
+    SDL_Rect rect={x,y,CELL_SIZE,CELL_SIZE};
+    SDL_RenderFillRect(renderer,&rect);
+}
+void renderGame(SDL_Renderer* renderer, Snake* snake,PlayGround* playGround)
+{ drawGrid(renderer);
+ Position snakePos = snake->getPosition();
+ Position cherryPos= playGround->getCherry();
+ Direction direction= snake->getDirection();
+ int snakeX=(snakePos.getx())*CELL_SIZE;
+ int snakeY=snakePos.gety()*CELL_SIZE;
+ int cherryX=cherryPos.getx()*CELL_SIZE;
+ int cherryY=cherryPos.gety()*CELL_SIZE;
+drawSnake(renderer,snakeX, snakeY);
+drawCherry(renderer,cherryX,cherryY);
+SDL_RenderPresent(renderer);
+}
+//Ham chuyen su ki�n SDL thanh Userinput
+UserInput getUserInputFromEvent(SDL_Event* event)
+{
 
-    quitSDL(window, renderer);
-    return 0;
+}
+int main(int argc,char *argv[]){
+
+ //PlayGround pr(20,20);
+ //Position posCherry=pr.getCherry();
+ //Snake snake (&pr);
+ //Position possnake= snake.getPosition();
+ //pr.changeCellType(CELLSNAKE,snake.getPosition());
+ //for(int i = 0 ; i < pr.getWidth() ; i++)
+ //{
+
+    // for ( int  j = 0 ; j < pr.getHeight(); j++)
+     //{  if(i==posCherry.getx()&&j==posCherry.gety())
+     //{
+     //    cout<<pr.changeCellType(CELLCHERRY,posCherry)<<" ";
+     //}
+     //  else{ Position pos(i,j);
+     //   cout<<pr.getCellType(pos)<<" ";}
+     //}
+     //cout<<endl;
+ //}
+SDL_Window* window;
+SDL_Renderer* renderer;
+PlayGround playGround(20,20);
+Snake snake(&playGround);
+initSDL(window,renderer);
+Direction direction = snake.getDirection();
+renderGame(renderer,&snake,&playGround);
+waitUntilKeyPressed();
+quitSDL(window,renderer);
+return 0;
 }
