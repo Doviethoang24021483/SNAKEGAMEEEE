@@ -58,10 +58,28 @@ drawSnake(renderer,snakeX, snakeY);
 drawCherry(renderer,cherryX,cherryY);
 SDL_RenderPresent(renderer);
 }
-//Ham chuyen su ki�n SDL thanh Userinput
-UserInput getUserInputFromEvent(SDL_Event* event)
+//Ham chuyen su kiên SDL thanh Userinput
+UserInput getUserInputFromEvent(SDL_Event event)
 {
+ if(event.type == SDL_KEYDOWN){
+    switch(event.key.keysym.sym)//truy cap su kien phim , ki hieu phim chua thong tin chi tiet ve phim,ma phim duoi dang SDLK)
+  {
+    case SDLK_UP: return KEY_UP;
+    case SDLK_DOWN: return KEY_DOWN;
+    case SDLK_LEFT: return KEY_LEFT;
+    case SDLK_RIGHT: return KEY_RIGHT;
 
+ }
+}
+return NO_INPUT;
+}
+bool checkSnakeEatCherry(PlayGround* playGround, Snake* snake){
+ Position snakePos= playGround->getCherry();
+  Position cherryPos =snake->getPosition();
+  if(snakePos.getx()==cherryPos.getx() && snakePos.gety()==cherryPos.gety()){
+    return true;
+  }
+  return false;
 }
 int main(int argc,char *argv[]){
 
@@ -83,14 +101,36 @@ int main(int argc,char *argv[]){
      //}
      //cout<<endl;
  //}
-SDL_Window* window;
-SDL_Renderer* renderer;
+SDL_Window* window=nullptr;
+SDL_Renderer* renderer=nullptr;
+initSDL(window,renderer);
 PlayGround playGround(20,20);
 Snake snake(&playGround);
-initSDL(window,renderer);
+SDL_Event event;
 Direction direction = snake.getDirection();
-renderGame(renderer,&snake,&playGround);
-waitUntilKeyPressed();
+Position snakePos = snake.getPosition();
+cout<<snakePos.getx()<<" "<<snakePos.gety();
+while(playGround.isGameRun()){
+    while(SDL_PollEvent(&event)){
+
+        if(event.type==SDL_QUIT){
+            return false;
+        }
+        else{
+            UserInput input = getUserInputFromEvent(event);//chuyen tung su kien thanh userinput
+            snake.processUserInput(input);//day su kien vao
+        }
+    }
+SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Xóa màn hình với màu đen
+        SDL_RenderClear(renderer);
+        renderGame(renderer, &snake, &playGround); // Vẽ rắn và sân chơi
+        snake.nextStep();
+        checkSnakeEatCherry(&playGround,&snake);
+        SDL_RenderPresent(renderer);
+
+        SDL_Delay(170); // Điều chỉnh tốc độ game (100ms mỗi bước)
+    }
+
 quitSDL(window,renderer);
 return 0;
 }
