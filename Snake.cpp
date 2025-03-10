@@ -31,10 +31,10 @@ Snake::Snake(PlayGround* playGround)
       }
       Position newpos = pos;
       switch(direction){
-      case UP: newpos=pos.gety()+1;break;
-      case DOWN:newpos=pos.gety()-1;break;
-      case LEFT:newpos=pos.getx()-1;break;
-      case RIGHT:newpos=pos.getx()+1;break;
+      case UP: newpos=pos.sety(pos.gety()-1);break;
+      case DOWN:newpos=pos.sety(pos.gety()+1);break;
+      case LEFT:newpos=pos.setx(pos.getx()-1);break;
+      case RIGHT:newpos=pos.setx(pos.getx()+1);break;
       }
 if(newpos.isInsideBox(0,0,playGround->getWidth(),playGround->getHeight()))
   {
