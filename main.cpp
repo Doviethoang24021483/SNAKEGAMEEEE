@@ -47,14 +47,20 @@ void drawCherry(SDL_Renderer* renderer, int x, int y){
 }
 void renderGame(SDL_Renderer* renderer, Snake* snake,PlayGround* playGround)
 { drawGrid(renderer);
- Position snakePos = snake->getPosition();
+ //Position snakePos = snake->getPosition();
  Position cherryPos= playGround->getCherry();
- Direction direction= snake->getDirection();
- int snakeX=(snakePos.getx())*CELL_SIZE;
- int snakeY=snakePos.gety()*CELL_SIZE;
+//Direction direction= snake->getDirection();
+ //int snakeX=(snakePos.getx())*CELL_SIZE;
+ //int snakeY=snakePos.gety()*CELL_SIZE;
  int cherryX=cherryPos.getx()*CELL_SIZE;
  int cherryY=cherryPos.gety()*CELL_SIZE;
-drawSnake(renderer,snakeX, snakeY);
+ //Ve toan bo than ran
+ const vector<Position>& snakeBody = snake->getBody();
+ for(const Position& segment : snakeBody) {
+    int snakeX = segment.getx()*CELL_SIZE;
+    int snakeY = segment.gety()*CELL_SIZE;
+    drawSnake(renderer,snakeX,snakeY);
+ }
 drawCherry(renderer,cherryX,cherryY);
 SDL_RenderPresent(renderer);
 }
@@ -74,9 +80,9 @@ UserInput getUserInputFromEvent(SDL_Event event)
 return NO_INPUT;
 }
 bool checkSnakeEatCherry(PlayGround* playGround, Snake* snake){
- Position snakePos= playGround->getCherry();
-  Position cherryPos =snake->getPosition();
-  if(snakePos.getx()==cherryPos.getx() && snakePos.gety()==cherryPos.gety()){
+ Position snakeHead= snake->getBody().front();//Lay vi tri dau ran
+  Position cherryPos =playGround->getCherry();
+  if(snakeHead.getx()==cherryPos.getx() && snakeHead.gety()==cherryPos.gety()){
     return true;
   }
   return false;
@@ -108,24 +114,26 @@ PlayGround playGround(20,20);
 Snake snake(&playGround);
 SDL_Event event;
 Direction direction = snake.getDirection();
-Position snakePos = snake.getPosition();
-cout<<snakePos.getx()<<" "<<snakePos.gety();
 while(playGround.isGameRun()){
     while(SDL_PollEvent(&event)){
 
         if(event.type==SDL_QUIT){
-            return false;
+            playGround.setGameRun(false);
         }
         else{
             UserInput input = getUserInputFromEvent(event);//chuyen tung su kien thanh userinput
             snake.processUserInput(input);//day su kien vao
         }
+
     }
 SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Xóa màn hình với màu đen
         SDL_RenderClear(renderer);
         renderGame(renderer, &snake, &playGround); // Vẽ rắn và sân chơi
         snake.nextStep();
-        checkSnakeEatCherry(&playGround,&snake);
+       if(checkSnakeEatCherry(&playGround,&snake)){
+          snake.eatCherry();
+
+       }
         SDL_RenderPresent(renderer);
 
         SDL_Delay(170); // Điều chỉnh tốc độ game (100ms mỗi bước)
