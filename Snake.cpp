@@ -5,47 +5,71 @@
 using namespace std;
 Snake::Snake(PlayGround* playGround)
 : playGround(playGround),
-  direction(RIGHT)
+  direction(Direction::RIGHT)
   {
   int startX = playGround->getWidth()/2;
   int startY = playGround->getHeight()/2;
-   pos=Position(startX, startY);
+   body.push_back(Position(startX, startY));
   }
+
   void Snake::processUserInput(UserInput input){
-      if(input!=NO_INPUT)
+      if(input!=UserInput::NO_INPUT)
     inputQueue.push(input);
   }
   Direction Snake::changeDirection(UserInput input){
-    if (input == KEY_UP && direction != DOWN) return UP;
-    if (input == KEY_DOWN && direction != UP) return DOWN;
-    if (input == KEY_LEFT && direction != RIGHT) return LEFT;
-    if (input == KEY_RIGHT && direction != LEFT) return RIGHT;
+    if (input == UserInput::KEY_UP && direction != Direction::DOWN) return UP;
+    if (input == UserInput::KEY_DOWN && direction != Direction::UP) return DOWN;
+    if (input == UserInput::KEY_LEFT && direction != Direction::RIGHT) return LEFT;
+    if (input == UserInput::KEY_RIGHT && direction != Direction::LEFT) return RIGHT;
     return direction; // Giữ nguyên hướng nếu input không hợp lệ
 }
-  void Snake::nextStep(){
+  bool Snake::nextStep(){
+      bool ateCherry=false;
       if(!inputQueue.empty())
       {
           UserInput input=inputQueue.front();
           inputQueue.pop();
           direction=changeDirection(input);
       }
-      Position newpos = pos;
+      int newX=body.front().getx();
+      int newY=body.front().gety();
       switch(direction){
-      case UP: newpos=pos.sety(pos.gety()-1);break;
-      case DOWN:newpos=pos.sety(pos.gety()+1);break;
-      case LEFT:newpos=pos.setx(pos.getx()-1);break;
-      case RIGHT:newpos=pos.setx(pos.getx()+1);break;
+      case Direction::UP: newY--;break;
+      case Direction::DOWN:newY++;break;
+      case Direction::LEFT:newX--;break;
+      case Direction::RIGHT:newX++;break;
       }
-if(newpos.isInsideBox(0,0,playGround->getWidth(),playGround->getHeight()))
+      Position newHead(newX,newY);
+if(!newHead.isInsideBox(0,0,playGround->getWidth(),playGround->getHeight()))
   {
-      playGround->changeCellType(CELLEMPTY,pos);
-        pos=newpos;
-      playGround->changeCellType(CELLSNAKE,newpos);
+      playGround->stopGame();
+      return false;
   }
+  for(int i=1;i<body.size();i++){
+    if(newHead.getx()==body[i].getx()&&newHead.gety()==body[i].gety()){
+        playGround->stopGame();
+        return false;
+    }
   }
-  Position Snake::getPosition() const{
-      return pos;
+  if(newHead.getx()==playGround->getCherry().getx()&&newHead.gety()==playGround->getCherry().gety()){
+    eatCherry();
+    playGround->generateCherry(body);
+    ateCherry=true;
   }
+  body.insert(body.begin(),newHead);
+  if(!ateCherry){
+    body.pop_back();
+  }
+  return ateCherry;
+  }
+  void Snake::eatCherry(){
+      //co the them diem so o day
+    cout<<"Ran da an cherry"<<endl;
+  }
+
   Direction Snake::getDirection() const {
       return direction;
+  }
+  const vector<Position>& Snake::getBody() const{
+   return body;
   }
