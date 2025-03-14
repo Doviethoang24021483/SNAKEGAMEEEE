@@ -1,4 +1,5 @@
 
+#include<SDL.h>
 #include "SDL_utils.h"
 #include<iostream>
 
@@ -25,13 +26,22 @@ void initSDL(SDL_Window* &window, SDL_Renderer* &renderer)
   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY,"linear");
   SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 }
+SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren){
+    SDL_Texture *texture = IMG_LoadTexture(ren, file.c_str());
+    if (texture == nullptr){
+        logSDLError(std::cout, "IMG_LoadTexture");
+    }
+    return texture;
+}
 
-void quitSDL(SDL_Window* window, SDL_Renderer* renderer)
-{
-
+void quitSDL(SDL_Window* window, SDL_Renderer* renderer, SDL_Texture* snakeTexture, SDL_Texture* snakeHeadTexture,SDL_Texture* cherryTexture) { // Thêm tham số snakeTexture
+     SDL_DestroyTexture(snakeTexture);
+    SDL_DestroyTexture(snakeHeadTexture);
+    SDL_DestroyTexture(cherryTexture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
+
 }
 
 void waitUntilKeyPressed()
