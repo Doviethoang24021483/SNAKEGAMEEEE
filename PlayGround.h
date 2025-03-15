@@ -7,7 +7,8 @@ using namespace std;
 enum CellType{
  CELLEMPTY,
  CELLSNAKE,
- CELLCHERRY
+ CELLCHERRY,
+ CELLWALL
 };
 //Dinh nghia cac trang thai co the co
 enum GameStatus{
@@ -24,6 +25,7 @@ private:
  vector<vector<CellType>> squares;
  Position cherry;
  bool gameRun;
+ vector<Position> walls;//Danh sach vi tri cac buc tuong
 public:
     PlayGround(int width_=0, int height_=0);
     int getWidth() const;
@@ -36,6 +38,8 @@ public:
     void generateCherry(const vector<Position>& snakeBody);
     void stopGame();
     void setGameRun(bool run);
+    const vector<Position>& getWalls() const;
+    void addWall(int x, int y);
 };
 #endif // PLAYGROUND_H
 
