@@ -34,10 +34,12 @@ SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren){
     return texture;
 }
 
-void quitSDL(SDL_Window* window, SDL_Renderer* renderer, SDL_Texture* snakeTexture, SDL_Texture* snakeHeadTexture,SDL_Texture* cherryTexture) { // Thêm tham số snakeTexture
+void quitSDL(SDL_Window* window, SDL_Renderer* renderer, SDL_Texture* snakeTexture, SDL_Texture* snakeHeadTexture,SDL_Texture* cherryTexture,SDL_Texture* wallTexture,SDL_Texture* backgroundTexture) { // Thêm tham số snakeTexture
      SDL_DestroyTexture(snakeTexture);
     SDL_DestroyTexture(snakeHeadTexture);
     SDL_DestroyTexture(cherryTexture);
+    SDL_DestroyTexture(wallTexture);
+    SDL_DestroyTexture(backgroundTexture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
