@@ -17,7 +17,7 @@ const int SCREEN_WIDTH = 600;
 "An Implementation of Code.org Painter";
 SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren);
 void initSDL(SDL_Window* &window, SDL_Renderer* &renderer);
-void quitSDL(SDL_Window* window, SDL_Renderer* renderer, SDL_Texture* snakeTexture, SDL_Texture* snakeHeadTexture, SDL_Texture* cherryTexture);
+void quitSDL(SDL_Window* window, SDL_Renderer* renderer, SDL_Texture* snakeTexture, SDL_Texture* snakeHeadTexture, SDL_Texture* cherryTexture, SDL_Texture* wallTexture,SDL_Texture* backgroundTexture);
  void waitUntilKeyPressed();
 #endif // SDL_UTILS_H
 
