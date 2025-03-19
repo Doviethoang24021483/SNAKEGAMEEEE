@@ -3,6 +3,7 @@
 #include "Position.h"
 #include "PlayGround.h"
 #include<queue>
+#include "AudioManager.h"
 
 enum Direction{
   UP,
@@ -25,9 +26,10 @@ class Snake{
      PlayGround* playGround;
      vector<Position> body;
      queue<UserInput> inputQueue;
+     AudioManager* audioManager;
  public:
     //Nhan mot con tro tro den doi tuong playground de tuong tac
-    Snake(PlayGround* playGround_);
+    Snake(PlayGround* playGround_,AudioManager* audioManager_);
     //Them input tu nguoi choi vao hang doi
     void processUserInput (UserInput input);
     //Thay doi huong
@@ -37,8 +39,9 @@ class Snake{
 
     Direction getDirection() const;
     // Xu li khi an cherry
-    void eatCherry();
+    void eatNote();
     //Tra ve vi tri cua tung dot ran.
     const vector<Position>& getBody() const;
+    double getRotationAngle() const;
 };
 #endif // SNAKE_H
