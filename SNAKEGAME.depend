@@ -1,0 +1,71 @@
+# depslib dependency file v1.0
+1742605323 source:c:\users\hoang\onedrive\desktop\snakegame\snakegame\main.cpp
+	<SDL.h>
+	<iostream>
+	"Position.h"
+	"PlayGround.h"
+	"SDL_utils.h"
+	"Snake.h"
+	<vector>
+	"AudioManager.h"
+
+1742605112 c:\users\hoang\onedrive\desktop\snakegame\snakegame\sdl_utils.h
+	<SDL.h>
+	<SDL_image.h>
+	<string>
+
+1742605112 source:c:\users\hoang\onedrive\desktop\snakegame\snakegame\sdl_utils.cpp
+	<SDL.h>
+	"SDL_utils.h"
+	<iostream>
+
+1742582195 source:c:\users\hoang\onedrive\desktop\snakegame\snakegame\snake.cpp
+	"Position.h"
+	"Snake.h"
+	"PlayGround.h"
+	"SDL_utils.h"
+	<iostream>
+	<cmath>
+	"AudioManager.h"
+
+1742493139 c:\users\hoang\onedrive\desktop\snakegame\snakegame\snake.h
+	"Position.h"
+	"PlayGround.h"
+	<queue>
+	"AudioManager.h"
+
+1742491722 source:c:\users\hoang\onedrive\desktop\snakegame\snakegame\playground.cpp
+	<iostream>
+	"PlayGround.h"
+	"Position.h"
+	<cassert>
+	<vector>
+	<cstdlib>
+	<ctime>
+
+1742483942 c:\users\hoang\onedrive\desktop\snakegame\snakegame\playground.h
+	<vector>
+	"Position.h"
+
+1742493640 c:\users\hoang\onedrive\desktop\snakegame\snakegame\position.h
+
+1742493640 source:c:\users\hoang\onedrive\desktop\snakegame\snakegame\position.cpp
+	"Position.h"
+	<iostream>
+
+1742494888 c:\users\hoang\onedrive\desktop\snakegame\snakegame\audiomanager.h
+	<SDL.h>
+	<SDL_mixer.h>
+	<string>
+	<vector>
+
+1742580577 source:c:\users\hoang\onedrive\desktop\snakegame\snakegame\audiomanager.cpp
+	<iostream>
+	"AudioManager.h"
+
+1742225888 c:\users\hoang\onedrive\desktop\snakegame\snakegame\note.h
+	<string>
+
+1742225866 source:c:\users\hoang\onedrive\desktop\snakegame\snakegame\note.cpp
+	"note.h"
+

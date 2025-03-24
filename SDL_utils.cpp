@@ -23,7 +23,7 @@ void initSDL(SDL_Window* &window, SDL_Renderer* &renderer)
   renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED|SDL_RENDERER_PRESENTVSYNC) ;
   if (renderer==nullptr) logSDLError(std::cout, "CreateRenderer", true);
 
-  SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY,"linear");
+  SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY,"nearest");
   SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren){
@@ -34,12 +34,13 @@ SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren){
     return texture;
 }
 
-void quitSDL(SDL_Window* window, SDL_Renderer* renderer, SDL_Texture* snakeTexture, SDL_Texture* snakeHeadTexture,SDL_Texture* cherryTexture,SDL_Texture* wallTexture,SDL_Texture* backgroundTexture) { // Thêm tham số snakeTexture
+void quitSDL(SDL_Window* window, SDL_Renderer* renderer, SDL_Texture* snakeTexture, SDL_Texture* snakeHeadTexture,SDL_Texture* cherryTexture,SDL_Texture* wallTexture,SDL_Texture* backgroundTexture, SDL_Texture* splashScreen) {
      SDL_DestroyTexture(snakeTexture);
     SDL_DestroyTexture(snakeHeadTexture);
     SDL_DestroyTexture(cherryTexture);
     SDL_DestroyTexture(wallTexture);
     SDL_DestroyTexture(backgroundTexture);
+    SDL_DestroyTexture(splashScreen);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();

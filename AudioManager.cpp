@@ -1,40 +1,46 @@
 #include<iostream>
 #include "AudioManager.h"
 using namespace std;
+
 AudioManager::AudioManager() {
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {// chua hieu het ne
-        std::cerr << "SDL_mixer init failed: " << Mix_GetError() << std::endl;//cerr la gi
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) { //khoi tao he thong am thanh
+        std::cerr << "SDL_mixer init failed: " << Mix_GetError() << std::endl;
     }
-    music = nullptr;
-    bpm = 120;
+    music = nullptr;//tranh tro vao vung nho da giai phong
+    //bpm = 120;
 }
+
 AudioManager::~AudioManager() {
     if (music) {
         Mix_FreeMusic(music);
-        music = nullptr;
+        music = nullptr;//Dam bao ko tro vao vung nho da giai phong
     }
     // Giải phóng tất cả các chunk
     for (Mix_Chunk* chunk : noteChunks) {
         Mix_FreeChunk(chunk);
     }
-    noteChunks.clear(); // Xóa vector
-    Mix_CloseAudio();
+    noteChunks.clear();// clear boi vi noteChunks van giu cac con tro xoa de tranh tro vao cac vung nho loi
+    Mix_CloseAudio(); // Dong toan bo he thong am thanh tranh ro ri
 }
+
 bool AudioManager::loadMusic(const std::string& file) {
-    music = Mix_LoadMUS(file.c_str());//tai nhac tu duong dan
+    music = Mix_LoadMUS(file.c_str());//tai nhac tu duong dan, chuyen string thanh chuoi c_style (const char*)
     if (!music) {
         std::cerr << "Failed to load music: " << Mix_GetError() << std::endl;
         return false;
     }
     return true;
 }
+
 //phat nhac
  void AudioManager::playMusic(){
   if(music) Mix_PlayMusic(music, -1);//lap vo han
  }
+
 void AudioManager::stopMusic() {
     Mix_HaltMusic();
 }
+
 bool AudioManager::loadNoteChunks(const std::vector<std::string>& files) {
     noteChunks.clear(); // Xóa các chunk cũ trước khi tải mới
 
@@ -53,18 +59,20 @@ bool AudioManager::loadNoteChunks(const std::vector<std::string>& files) {
     }
     return true;
 }
+
 void AudioManager::playRandomNoteChunk() {
     if (!noteChunks.empty()) {
         int randomIndex = rand() % noteChunks.size(); // Chọn ngẫu nhiên một chunk
         Mix_PlayChannel(-1, noteChunks[randomIndex], 0);
     }
 }
+
 void AudioManager::setMusicVolume(int volume) {
     if (volume < 0) volume = 0;
     if (volume > MIX_MAX_VOLUME) volume = MIX_MAX_VOLUME;
-    Mix_VolumeMusic(volume);
+    Mix_VolumeMusic(volume);//thay doi am thanh nhac nen
 }
-// lay toc do nhip bai hat
+
 
 
 

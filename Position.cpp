@@ -19,14 +19,3 @@ int Position::gety() const {
   return y;
 }
 
-Position Position::setx(int newx) const {
- return Position(newx,y);
-}
-//Tao ra 1 doi tuong Position moi voi y da dc thay doi an toan, de go loi, de bao tri
-Position Position::sety(int newy) const {
- return Position(x,newy);
-}
-
-void Position::disPlay() const{
- cout<<x<<" "<<y;
-}
