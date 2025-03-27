@@ -6,14 +6,20 @@
 #include<vector>
 #include<cstdlib>
 #include<ctime>
+#include"SDL_utils.h"
+#include"EffectManager.h"
 using namespace std;
-
+const CellSize CELL_SIZE = {42,42};
 // Ham khoi tao
 PlayGround::PlayGround(int width_, int height_)
 : width(width_),height(height_),
 squares(height,vector<CellType>(width,CELLEMPTY)),
 status(GAMERUNNING),
-gameRun(true)
+gameRun(true),
+lastGoldTime(SDL_GetTicks()),//luu thoi diem bat dau game
+isGoldTime(false),//ban dau ko o trang thai vang
+isGuiding(true),
+  guideStartTime(SDL_GetTicks()) // Khởi tạo thời điểm bắt đầu
 {
  srand(time(0)); // Tao ra cac rand khac nhau
  generateNotes({}); // Tao ra danh sach cac not nhac ban dau trong tro choi chua can quan tam den vi tri ran
@@ -56,60 +62,96 @@ void PlayGround::setGameRun(bool run){
 }
 
 
-const std::vector<Position>& PlayGround::getNotes() const {
+const std::vector<Note>& PlayGround::getNotes() const {
     return notes;
 }
 
-void PlayGround::generateNewNote(const vector<Position>& snakeBody) {
-    Position newNote;
-    bool validPosition = false;
-    int maxIterations = 1000; // Chống vòng lặp vô hạn
-    while (!validPosition) {
-          int x = (rand() % getWidth());
-        int y = (rand() % getHeight()) ;
-        newNote = Position(x, y);
-        validPosition = true;
 
-        // Kiểm tra không trùng với thân rắn
-        for (const Position& segment : snakeBody) {
-            if (segment.getx() == newNote.getx() && segment.gety() == newNote.gety()) {
-                validPosition = false;
-                break;
-            }
-        }
-         if (!validPosition) continue; // Bỏ qua các kiểm tra khác nếu đã không hợp lệ
+void PlayGround::generateNotes(const std::vector<Position>& snakeBody) {
+    notes.clear(); // Xóa các nốt nhạc cũ
 
-        // Kiểm tra không trùng với các nốt nhạc khác
-        for (const Position& note : notes) {
-            if (note.getx() == newNote.getx() && note.gety() == newNote.gety()) {
-                validPosition = false;
-                break;
-            }
-        }
-
-        if (!validPosition) continue; // Bỏ qua các kiểm tra khác nếu đã không hợp lệ
-    }
-    // Nếu tất cả các kiểm tra đều vượt qua, vị trí này hợp lệ
-        if (validPosition) {
-            notes.push_back(newNote);
-            return; // Thoát khỏi hàm sau khi tìm thấy một vị trí hợp lệ
-        }
-         cerr << "Cảnh báo: Không thể tìm thấy vị trí hợp lệ cho nốt nhạc sau " << maxIterations << " lần thử." << endl;
-    }
-
-void PlayGround::generateNotes(const vector<Position>& snakeBody) {
-    notes.clear(); // Xóa các nốt nhạc cũ (nếu có)
     for (int i = 0; i < NUM_NOTES; ++i) {
-        generateNewNote(snakeBody);
+        Note newNote;
+        bool validPosition = false;
+        while (!validPosition) {
+            // Generate random position
+           int x = rand() % (SCREEN_WIDTH / CELL_SIZE.width);
+            int y = rand() % (SCREEN_HEIGHT / CELL_SIZE.height);
+            newNote.position = Position(x, y);
+
+            // Check if the position is valid (not overlapping with snake body)
+            validPosition = true;
+            for (const Position& segment : snakeBody) {
+                if (segment.getx() == newNote.position.getx() && segment.gety() == newNote.position.gety()) {
+                    validPosition = false;
+                    break;
+                }
+            }
+            //Check not trùng với các note khác
+           for (const Note& note : notes) {
+                if (note.position.getx() == newNote.position.getx() && note.position.gety() == newNote.position.gety()) {
+                    validPosition = false;
+                    break;
+                }
+            }
+
+        }
+        // Assign note value
+        newNote.value = static_cast<NoteValue>(rand() % NUM_NOTE_VALUES);//Chuyen doi so nguyen ngau nhien tu NUM_NOTE_VALUES - 1 thanh 1 gia tri thuoc kieu NoteValue
+
+        notes.push_back(newNote);
     }
+
+    //set target note
+        if (!notes.empty()) {
+        int randomIndex = rand() % notes.size();
+        targetNote = notes[randomIndex]; //Lay random 1 not nhac trong notes lam not muc tieu
+    } else {
+        // Handle case where no notes were created
+        std::cerr << "Warning: No notes were created." << std::endl;
+    }
+    setGuiding(true); // Set isGuiding to true here
+     setGuideStartTime(SDL_GetTicks());
 }
 
-
-void PlayGround::removeNote(Position note) {
-    for ( int i = 0; i < notes.size(); ++i) {
-        if (notes[i].getx() == note.getx() && notes[i].gety() == note.gety()) {
+//void PlayGround::removeNote(Position note) {
+    //for ( int i = 0; i < notes.size(); ++i) {
+       // if (notes[i].getx() == note.getx() && notes[i].gety() == note.gety()) {
+           // notes.erase(notes.begin() + i);
+            //break;
+       // }
+  //  }
+//}
+void PlayGround::removeNote(Note note) {
+    for (size_t i = 0; i < notes.size(); ++i) {
+        if (notes[i].position.getx() == note.position.getx() && notes[i].position.gety() == note.position.gety()&& notes[i].value == note.value) {
             notes.erase(notes.begin() + i);
-            break;
+            return;
         }
     }
 }
+bool PlayGround::goldTime(){
+  Uint32 currentTime = SDL_GetTicks();
+
+  //Neu da qua 30s thi kich hoat thoi gian vang
+  if(currentTime - lastGoldTime >= 30000){
+    isGoldTime = true;
+    lastGoldTime = currentTime ;// dat lai thoi diem bat dau
+  // Sau 10s thi tat thoi gian vang
+  if(isGoldTime && (currentTime - lastGoldTime >= 10000)){
+    isGoldTime = false;
+  }
+  }
+  return isGoldTime;
+}
+ //Position PlayGround::getTargetNote(){
+  // return targetNote;
+ //}
+ Note PlayGround::getTargetNote(){
+ return targetNote;
+ }
+
+NoteValue PlayGround::getNoteSequence(int index) {
+    return noteSequence[index];
+}
+
