@@ -1,13 +1,18 @@
 #include<iostream>
 #include "AudioManager.h"
+#include <time.h>
+#include <SDL.h>
 using namespace std;
 
-AudioManager::AudioManager() {
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) { //khoi tao he thong am thanh
-        std::cerr << "SDL_mixer init failed: " << Mix_GetError() << std::endl;
+AudioManager::AudioManager() : music(nullptr), failChunk(nullptr),completeSong(nullptr) {
+    // Initialize SDL_mixer
+    if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096) == -1) {
+        std::cerr << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << std::endl;
     }
-    music = nullptr;//tranh tro vao vung nho da giai phong
-    //bpm = 120;
+        srand(time(0));
+        for (int i = 0; i < 5; i++) {
+        noteSounds[i] = nullptr;
+    }
 }
 
 AudioManager::~AudioManager() {
@@ -15,11 +20,20 @@ AudioManager::~AudioManager() {
         Mix_FreeMusic(music);
         music = nullptr;//Dam bao ko tro vao vung nho da giai phong
     }
-    // Giải phóng tất cả các chunk
-    for (Mix_Chunk* chunk : noteChunks) {
-        Mix_FreeChunk(chunk);
+    for ( int i = 0 ; i < 5 ; i ++){
+        if(noteSounds[i]){
+            Mix_FreeChunk(noteSounds[i]);
+        }
     }
-    noteChunks.clear();// clear boi vi noteChunks van giu cac con tro xoa de tranh tro vao cac vung nho loi
+    if (failChunk){
+       Mix_FreeChunk(failChunk);
+        failChunk = nullptr;//Dam bao ko tro vao vung nho da giai phong
+    }
+    if (completeSong){
+       Mix_FreeMusic(completeSong);
+        completeSong= nullptr;//Dam bao ko tro vao vung nho da giai phong
+    }
+   // .clear();// clear boi vi noteChunks van giu cac con tro xoa de tranh tro vao cac vung nho loi
     Mix_CloseAudio(); // Dong toan bo he thong am thanh tranh ro ri
 }
 
@@ -41,38 +55,51 @@ void AudioManager::stopMusic() {
     Mix_HaltMusic();
 }
 
-bool AudioManager::loadNoteChunks(const std::vector<std::string>& files) {
-    noteChunks.clear(); // Xóa các chunk cũ trước khi tải mới
-
-    for (const std::string& file : files) {
-        Mix_Chunk* chunk = Mix_LoadWAV(file.c_str());
-        if (!chunk) {
-            std::cerr << "Failed to load chunk: " << file << " Error: " << Mix_GetError() << std::endl;
-            // Giải phóng các chunk đã tải trước đó
-            for (Mix_Chunk* loadedChunk : noteChunks) {
-                Mix_FreeChunk(loadedChunk);
-            }
-            noteChunks.clear();
-            return false;
-        }
-        noteChunks.push_back(chunk);
+ bool AudioManager::loadFailChunk(const std::string& filePath) {
+    failChunk = Mix_LoadWAV(filePath.c_str());
+    if (failChunk == nullptr) {
+        std::cerr << "Failed to load 'fail' sound effect: " << filePath << " SDL_mixer Error: " << Mix_GetError() << std::endl;
+        return false;
     }
     return true;
 }
 
-void AudioManager::playRandomNoteChunk() {
-    if (!noteChunks.empty()) {
-        int randomIndex = rand() % noteChunks.size(); // Chọn ngẫu nhiên một chunk
-        Mix_PlayChannel(-1, noteChunks[randomIndex], 0);
+void AudioManager::playFailChunk() {
+    if (failChunk != nullptr) {
+        Mix_PlayChannel(-1, failChunk, 0);
     }
 }
-
 void AudioManager::setMusicVolume(int volume) {
     if (volume < 0) volume = 0;
     if (volume > MIX_MAX_VOLUME) volume = MIX_MAX_VOLUME;
     Mix_VolumeMusic(volume);//thay doi am thanh nhac nen
 }
-
+bool AudioManager::loadNoteChunk(NoteValue note, const std::string& filePath){
+     noteSounds[note] = Mix_LoadWAV(filePath.c_str());
+    if (noteSounds[note] == nullptr) {
+        std::cerr << "Failed to load note sound effect: " << filePath << " SDL_mixer Error: " << Mix_GetError() << std::endl;
+        return false;
+    }
+    return true;
+}
+ void AudioManager::playNoteChunk(NoteValue note){
+    if (noteSounds[note] != nullptr) {
+        Mix_PlayChannel(-1, noteSounds[note], 0);
+    }
+}
+ bool AudioManager::loadCompleteSong(const std::string& filePath){
+    completeSong = Mix_LoadMUS(filePath.c_str());
+     if (completeSong == nullptr) {
+        std::cerr << "Failed to load complete song: " << filePath << " SDL_mixer Error: " << Mix_GetError() << std::endl;
+        return false;
+    }
+    return true;
+ }
+void AudioManager::playCompleteSong(){
+    if (completeSong != nullptr) {
+          Mix_PlayMusic(completeSong,1);
+    }
+}
 
 
 
