@@ -4,6 +4,7 @@
 #include "PlayGround.h"
 #include <queue>
 #include "AudioManager.h"
+#include "EffectManager.h"
 
 enum Direction{
   UP,
@@ -27,8 +28,9 @@ class Snake{
      vector<Position> body;
      queue<UserInput> inputQueue;
      AudioManager* audioManager;
+     EffectManager* effectManager;
  public:
-    Snake(PlayGround* playGround_,AudioManager* audioManager_);
+    Snake(PlayGround* playGround_,AudioManager* audioManager_,EffectManager* effectManager);
 
     //Them input tu nguoi choi vao hang doi
     void processUserInput (UserInput input);
