@@ -5,6 +5,7 @@
 #include<SDL_mixer.h>
 #include <string>
 #include<vector>
+#include "PlayGround.h"
  using namespace std;
 class AudioManager {
 public:
@@ -15,12 +16,20 @@ public:
     void playMusic();
     void stopMusic();
     //int getBPM() const;
-     bool loadNoteChunks(const vector<string>& files);
-    void playRandomNoteChunk();
+     //bool loadNoteChunks(const vector<string>& files);
+    //void playRandomNoteChunk();
      void setMusicVolume(int volume); // Dieu chinh am luong cua nhac nen
+     bool loadFailChunk( const string& file);
+     void playFailChunk();
+     bool loadNoteChunk(NoteValue note, const std::string& filePath);
+    void playNoteChunk(NoteValue note);
+    bool loadCompleteSong(const std::string& filePath);
+    void playCompleteSong();
 private:
     Mix_Music* music; // Luu tru file nhac nen
     std::vector<Mix_Chunk*> noteChunks;// Luu am thanh tung not nhac
-    //int bpm;  // Nhịp độ bài nhạc
+     Mix_Chunk* failChunk;
+     Mix_Chunk* noteSounds[5];
+    Mix_Music* completeSong;
 };
 #endif // AUDIOMANAGER
