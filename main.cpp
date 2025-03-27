@@ -6,8 +6,10 @@
 #include "Snake.h"
 #include <vector>
 #include "AudioManager.h"
+#include "EffectManager.h"
+#include<cmath>
 
-const CellSize CELL_SIZE = {24,24}; //Kich thuoc o
+const CellSize CELL_SIZE = {42,42}; //Kich thuoc o
 
     void showSplashScreen(SDL_Renderer* renderer, SDL_Texture* splashTexture) {
     bool waiting = true;
@@ -39,8 +41,15 @@ const CellSize CELL_SIZE = {24,24}; //Kich thuoc o
 void drawBackground(SDL_Renderer* renderer, int cellWidth, int cellHeight, SDL_Texture* backgroundTexture) {
     SDL_Rect destRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
     SDL_RenderCopy(renderer, backgroundTexture, NULL, &destRect);
+    // Vẽ lưới
+    SDL_SetRenderDrawColor(renderer, 200, 200, 200, 50); // Màu xám mờ
+    for (int x = 0; x < SCREEN_WIDTH; x += cellWidth) {
+        SDL_RenderDrawLine(renderer, x, 0, x, SCREEN_HEIGHT);
+    }
+    for (int y = 0; y < SCREEN_HEIGHT; y += cellHeight) {
+        SDL_RenderDrawLine(renderer, 0, y, SCREEN_WIDTH, y);
+    }
 }
-
 void drawSnakeSegment(SDL_Renderer* renderer, int x, int y, int width, int height, SDL_Texture* texture,double angle) {
     SDL_Rect destRect = { x, y, width, height };
      SDL_Point center = { width / 2, height / 2 }; // center
@@ -53,18 +62,34 @@ void drawSnakeHead(SDL_Renderer* renderer, int x, int y, int width, int height, 
     SDL_RenderCopyEx(renderer, texture, NULL, &destRect, angle, &center, SDL_FLIP_NONE);
 }
 
-void drawNote(SDL_Renderer* renderer, int x, int y, int width, int height,SDL_Texture* noteTexture) {
+void drawNote(SDL_Renderer* renderer, int x, int y, int width, int height,SDL_Texture* noteTexture, bool isGold, PlayGround *playGround, SDL_Texture* noteTargetTexture,NoteValue currentValue) {
     SDL_Rect desrect = { x, y, width, height };
-    SDL_RenderCopy(renderer, noteTexture,NULL, &desrect);
-}
+    if (playGround->isNoteGuiding() && (SDL_GetTicks() - playGround->getGuideStartTime() < playGround->getGuideDuration())&& currentValue == playGround->noteSequence[playGround->currentNoteIndex]) {
+        double angle = sin((SDL_GetTicks() - playGround->getGuideStartTime()) / 100.0) * 10.0; // Tạo góc lắc lư
+        SDL_Point center = { width / 2, height / 2 };
+    if( x== playGround->getTargetNote().position.getx()*CELL_SIZE.width && y == playGround->getTargetNote().position.gety()*CELL_SIZE.height){
+        SDL_RenderCopyEx(renderer,noteTargetTexture, NULL,&desrect,angle,&center,SDL_FLIP_NONE );
+    }
+    else{
 
-void renderGame(SDL_Renderer* renderer, Snake* snake, PlayGround* playGround, SDL_Texture* snakeTexture, SDL_Texture* snakeHeadTexture, SDL_Texture* noteTexture, SDL_Texture* backgroundTexture) {
+     SDL_RenderCopyEx(renderer, noteTexture, NULL, &desrect, angle, &center, SDL_FLIP_NONE);
+    }
+}
+else{
+    if( x== playGround->getTargetNote().position.getx()*CELL_SIZE.width && y == playGround->getTargetNote().position.gety()*CELL_SIZE.height){
+            SDL_RenderCopy(renderer,noteTargetTexture,NULL,&desrect);}
+    else{
+        SDL_RenderCopy(renderer,noteTexture,NULL,&desrect);
+    }
+}
+}
+void renderGame(SDL_Renderer* renderer, Snake* snake, PlayGround* playGround, SDL_Texture* snakeTexture, SDL_Texture* snakeHeadTexture, SDL_Texture* noteTexture, SDL_Texture* backgroundTexture, bool isGold, SDL_Texture* noteTargetTexture) {
     drawBackground(renderer, CELL_SIZE.width, CELL_SIZE.height,backgroundTexture);
-     const vector<Position>& notes = playGround->getNotes();
-    for (const Position& note : notes) {
-        int noteX = note.getx() * CELL_SIZE.width;
-        int noteY = note.gety() * CELL_SIZE.height;
-        drawNote(renderer, noteX, noteY, CELL_SIZE.width, CELL_SIZE.height, noteTexture);
+     const vector<Note>& notes = playGround->getNotes();
+    for (const Note& note : notes) {
+        int noteX = note.position.getx() * CELL_SIZE.width;
+        int noteY = note.position.gety() * CELL_SIZE.height;
+        drawNote(renderer, noteX, noteY, CELL_SIZE.width, CELL_SIZE.height, noteTexture, isGold,playGround ,noteTargetTexture,note.value);
     }
 
     const std::vector<Position>& snakeBody = snake->getBody();
@@ -98,9 +123,9 @@ UserInput getUserInputFromEvent(SDL_Event event) {
 
  bool checkSnakeEatNote(PlayGround* playGround, Snake* snake) {
     Position snakeHead = snake->getBody().front();
-    const vector<Position>& notes = playGround->getNotes();
-    for (const Position& note : notes) {
-        if (snakeHead.getx() == note.getx() && snakeHead.gety() == note.gety()) {
+    const vector<Note>& notes = playGround->getNotes();
+    for (const Note& note : notes) {
+        if (snakeHead.getx() == note.position.getx() && snakeHead.gety() == note.position.gety()) {
             return true;
         }
     }
@@ -115,40 +140,64 @@ int main(int argc, char* argv[]) {
     SDL_Texture* wallTexture = nullptr;
     SDL_Texture* backgroundTexture = nullptr;
     SDL_Texture* splashScreen = nullptr;
+    SDL_Texture* noteTargetTexture = nullptr;
     initSDL(window, renderer);
     AudioManager audioManager;
+    EffectManager effectmanager(renderer);
     if (!audioManager.loadMusic("music.mp3")) {
         std::cerr << "Failed to load music!" << std::endl;
-        quitSDL(window, renderer, snakeTexture, snakeHeadTexture, noteTexture, wallTexture, backgroundTexture, splashScreen);
+        quitSDL(window, renderer, snakeTexture, snakeHeadTexture, noteTexture, wallTexture, backgroundTexture, splashScreen,noteTargetTexture);
         return -1;
     }
-    std::vector<std::string> noteFiles = {
-        "a.mp3",
-        "b.mp3",
-        "c.mp3",
-        "d.mp3",
-        "e.mp3" ,
-        "f.mp3",
-        "g.mp3"
-    };
-     if (!audioManager.loadNoteChunks(noteFiles)) {
+    if (!audioManager.loadFailChunk("fail.mp3")) {
         std::cerr << "Failed to load note chunks!" << std::endl;
-        quitSDL(window, renderer, snakeTexture, snakeHeadTexture, noteTexture, wallTexture, backgroundTexture,splashScreen);
+        quitSDL(window, renderer, snakeTexture, snakeHeadTexture, noteTexture, wallTexture, backgroundTexture,splashScreen,noteTargetTexture);
+        return -1;
+    }
+     if (!audioManager.loadNoteChunk(NOTE_C, "C.mp3")) {
+        std::cerr << "Failed to load C sound effect!" << std::endl;
+        quitSDL(window, renderer, snakeTexture, snakeHeadTexture, noteTexture, wallTexture, backgroundTexture, splashScreen, noteTargetTexture);
+        return -1;
+    }
+        if (!audioManager.loadNoteChunk(NOTE_D, "D.mp3")) {
+        std::cerr << "Failed to load D sound effect!" << std::endl;
+        quitSDL(window, renderer, snakeTexture, snakeHeadTexture, noteTexture, wallTexture, backgroundTexture, splashScreen, noteTargetTexture);
+        return -1;
+    }
+        if (!audioManager.loadNoteChunk(NOTE_E, "E.mp3")) {
+        std::cerr << "Failed to load E sound effect!" << std::endl;
+        quitSDL(window, renderer, snakeTexture, snakeHeadTexture, noteTexture, wallTexture, backgroundTexture, splashScreen, noteTargetTexture);
+        return -1;
+    }
+        if (!audioManager.loadNoteChunk(NOTE_F, "F.mp3")) {
+        std::cerr << "Failed to load F sound effect!" << std::endl;
+        quitSDL(window, renderer, snakeTexture, snakeHeadTexture, noteTexture, wallTexture, backgroundTexture, splashScreen, noteTargetTexture);
+        return -1;
+    }
+        if (!audioManager.loadNoteChunk(NOTE_G, "G.mp3")) {
+        std::cerr << "Failed to load G sound effect!" << std::endl;
+        quitSDL(window, renderer, snakeTexture, snakeHeadTexture, noteTexture, wallTexture, backgroundTexture, splashScreen, noteTargetTexture);
+        return -1;
+    }
+     if (!audioManager.loadCompleteSong("complete.mp3")) {
+        std::cerr << "Failed to load complete song!" << std::endl;
+        quitSDL(window, renderer, snakeTexture, snakeHeadTexture, noteTexture, wallTexture, backgroundTexture, splashScreen, noteTargetTexture);
         return -1;
     }
      audioManager.setMusicVolume(30);
      audioManager.playMusic(); // Phát nhạc khi game bắt đầu
 
       PlayGround playGround(20, 20);
-      Snake snake(&playGround, &audioManager); // Truyền playground audioManager vào Snake
+      Snake snake(&playGround, &audioManager,&effectmanager); // Truyền playground audioManager vào Snake
 
      snakeTexture = loadTexture("snake_body.png", renderer);
      noteTexture = loadTexture("note.png", renderer);
+     noteTargetTexture = loadTexture ("noteTarget.png",renderer);
      snakeHeadTexture = loadTexture("snake_head.png", renderer);
      backgroundTexture = loadTexture("background.png", renderer);
      splashScreen = loadTexture("splashscreen.png", renderer);
-    if (snakeTexture == nullptr || snakeHeadTexture == nullptr || noteTexture == nullptr || backgroundTexture == nullptr || splashScreen == nullptr) {
-        quitSDL(window, renderer, snakeTexture, snakeHeadTexture, noteTexture, wallTexture,backgroundTexture,splashScreen);
+    if (snakeTexture == nullptr || snakeHeadTexture == nullptr || noteTexture == nullptr || backgroundTexture == nullptr || splashScreen == nullptr || noteTargetTexture == nullptr) {
+        quitSDL(window, renderer, snakeTexture, snakeHeadTexture, noteTexture, wallTexture,backgroundTexture,splashScreen,noteTargetTexture);
         return 1;
     }
     // Hiển thị màn hình chào
@@ -169,22 +218,23 @@ int main(int argc, char* argv[]) {
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);// dat mau nen la den
         SDL_RenderClear(renderer); // phu mau den len co tac dung xoa di hinh anh cu de ko bi nhoe hay trung hinh sau nhieu buoc thay doi hinh anh
-
-        renderGame(renderer, &snake, &playGround, snakeTexture, snakeHeadTexture,noteTexture,backgroundTexture);
+        bool isGold = playGround.goldTime();
+        renderGame(renderer, &snake, &playGround, snakeTexture, snakeHeadTexture,noteTexture,backgroundTexture,isGold,noteTargetTexture);
         snake.nextStep();
-
+        effectmanager.updateEffects();
+       effectmanager.drawEffects();
        if (checkSnakeEatNote(&playGround, &snake)) {
            snake.eatNote();
 
         }
         SDL_RenderPresent(renderer);
 
-        SDL_Delay(180);
+        SDL_Delay(170);
 
 }
     waitUntilKeyPressed();
     audioManager.stopMusic();
     audioManager.~AudioManager();
-    quitSDL(window, renderer, snakeTexture, snakeHeadTexture,noteTexture,wallTexture,backgroundTexture,splashScreen);
+    quitSDL(window, renderer, snakeTexture, snakeHeadTexture,noteTexture,wallTexture,backgroundTexture,splashScreen,noteTargetTexture);
     return 0;
 }
