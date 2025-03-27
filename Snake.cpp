@@ -5,14 +5,16 @@
 #include<iostream>
 #include<cmath>
 #include "AudioManager.h"
+#include "EffectManager.h"
 
-const CellSize CELL_SIZE = {24,24};
+const CellSize CELL_SIZE = {42,42};
 
 using namespace std;
-Snake::Snake(PlayGround* playGround_, AudioManager* audioManager_)
+Snake::Snake(PlayGround* playGround_, AudioManager* audioManager_,EffectManager* effectManager)
 : playGround(playGround_),
   direction(Direction::RIGHT),
-   audioManager(audioManager_)  // Khởi tạo audioManager
+   audioManager(audioManager_),  // Khởi tạo audioManager
+    effectManager(effectManager)
   {
   int startX = playGround->getWidth()/2;
   int startY = playGround->getHeight()/2;
@@ -68,38 +70,79 @@ if (!piNewHead.isInsideBox(0, 0,SCREEN_WIDTH, SCREEN_HEIGHT )) {
     }
   }
 
-  const vector<Position>& notes = playGround->getNotes();
-    for (const Position& note : notes) {
-        if (newHead.getx() == note.getx() && newHead.gety() == note.gety()) {
+  const vector<Note>& notes = playGround->getNotes();
+    for (const Note& note : notes) {
+        if (newHead.getx() == note.position.getx() && newHead.gety() == note.position.gety()) {
+            if ( note.position.getx() == playGround->getTargetNote().position.getx() && note.position.gety() == playGround->getTargetNote().position.gety() ){
+                cout<<"Dung not muc tieu"<<endl;
+            }
+            else {
+                cout<<"Sai not muc tieu"<<endl;
+            }
             ateNote = true;
             break; // Ăn một nốt nhạc thì thoát khỏi vòng lặp
         }
     }
 
   body.insert(body.begin(),newHead);
-  if(!ateNote){
+  if(!ateNote ){
     body.pop_back();
   }
 
+//if((playGround->goldTime()) == true && ateNote == true) {
+   //  body.pop_back();
+   //  body.pop_back();
+   //}
   return ateNote;
   }
 
-   void Snake::eatNote() {
-    //co the them diem so o day
-    cout<<"Ran da an not nhac"<<endl;
+void Snake::eatNote() {
     Position head = body.front();
     for (size_t i = 0; i < playGround->getNotes().size(); ++i) {
-            Position note = (playGround->getNotes())[i];
-             if (head.getx() == note.getx() && head.gety() == note.gety()) {
-                     audioManager->playRandomNoteChunk();
-                    playGround->removeNote(note);
-                    playGround->generateNewNote(body);
-                     break;
-             }
+        Note note = (playGround->getNotes())[i];
+        if (head.getx() == note.position.getx() && head.gety() == note.position.gety()) {
+
+            // Kiểm tra xem có phải là targetNote hay không
+            bool isTargetNote = (note.position.getx() == playGround->getTargetNote().position.getx() &&
+                          note.position.gety() == playGround->getTargetNote().position.gety());
+
+     if ( playGround->noteSequence[playGround->currentNoteIndex] == note.value) {
+        // Ăn đúng nốt theo thứ tự
+        audioManager->playNoteChunk(note.value);
+       // playGround->score += 10;  // Điểm bình thường
+       // std::cout << "An dung note! Diem: " << playGround->score << std::endl;
+            // Tạo hiệu ứng hạt
+            effectManager->createEatEffect(note.position.getx() * CELL_SIZE.width,note.position.gety() * CELL_SIZE.height);
+            playGround->setGuiding(false);
+        if (playGround->currentNoteIndex >= 4) {
+            // Hoàn thành bản nhạc
+            playGround->currentNoteIndex = 0;
+            audioManager->playCompleteSong();
+            playGround->generateNotes(body);
+            std::cout << "Hoan thanh ban nhac!" << std::endl;
+        }
+        else {
+             playGround->currentNoteIndex++;
+             // Bắt đầu hướng dẫn cho nốt nhạc tiếp theo
+            playGround->setGuiding(true);
+            playGround->setGuideStartTime(SDL_GetTicks());
+               playGround->generateNotes(body);
+        }
+
+    } else {
+        // Ăn sai nốt
+        playGround->setGuiding(false);
+        playGround->currentNoteIndex = 0;
+        audioManager->playFailChunk();
+        body.pop_back(); // Không làm rắn dài ra
+        std::cout << "An sai note!" << std::endl;
+         playGround->generateNotes(body);
     }
 
-  }
-
+    return;
+}
+    }
+}
   Direction Snake::getDirection() const {
       return direction;
   }
