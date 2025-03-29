@@ -9,7 +9,7 @@
 #include"SDL_utils.h"
 #include"EffectManager.h"
 using namespace std;
-const CellSize CELL_SIZE = {42,42};
+const CellSize CELL_SIZE = {30,30};
 // Ham khoi tao
 PlayGround::PlayGround(int width_, int height_)
 : width(width_),height(height_),
@@ -112,6 +112,7 @@ void PlayGround::generateNotes(const std::vector<Position>& snakeBody) {
     }
     setGuiding(true); // Set isGuiding to true here
      setGuideStartTime(SDL_GetTicks());
+    startNewSequence(); // Bắt đầu đếm thời gian
 }
 
 //void PlayGround::removeNote(Position note) {
@@ -154,4 +155,6 @@ bool PlayGround::goldTime(){
 NoteValue PlayGround::getNoteSequence(int index) {
     return noteSequence[index];
 }
-
+void PlayGround::startNewSequence() {
+    sequenceStartTime = SDL_GetTicks();
+}
