@@ -51,6 +51,8 @@ private:
  bool isGuiding = true;
     Uint32 guideStartTime;
     Uint32 guideDuration = 3000; // 3 giây
+    Uint32 sequenceStartTime; // Thời điểm bắt đầu chuỗi nốt nhạc
+    Uint32 sequenceTimeLimit = 2000; // 10 giây (có thể điều chỉnh)
 public:
     PlayGround(int width_=0, int height_=0); // Khoi tao san choi voi kich thuoc mac dinh la 0 0
 
@@ -72,13 +74,16 @@ public:
     Note getTargetNote () ;
     NoteValue getNoteSequence(int index);
      int currentNoteIndex = 0;// de theo doi chi so cua  not nhac trong 1 chuoi cac not nhac
-     int NUM_NOTES = 40 ;
+     int NUM_NOTES = 10 ;
      NoteValue noteSequence[NUM_NOTE_VALUES] = {NOTE_C, NOTE_D, NOTE_E, NOTE_F, NOTE_G};
      bool isNoteGuiding() const { return isGuiding; }
     Uint32 getGuideStartTime() const { return guideStartTime; }
     Uint32 getGuideDuration() const { return guideDuration; }
     void setGuiding(bool guiding) { isGuiding = guiding; }
     void setGuideStartTime(Uint32 time) { guideStartTime = time; }
+    void startNewSequence();
+    Uint32 getSequenceStartTime() const { return sequenceStartTime; }
+    Uint32 getSequenceTimeLimit() const { return sequenceTimeLimit; }
 };
 #endif // PLAYGROUND_H
 
