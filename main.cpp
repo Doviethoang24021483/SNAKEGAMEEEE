@@ -9,7 +9,7 @@
 #include "EffectManager.h"
 #include<cmath>
 
-const CellSize CELL_SIZE = {42,42}; //Kich thuoc o
+const CellSize CELL_SIZE = {30,30}; //Kich thuoc o
 
     void showSplashScreen(SDL_Renderer* renderer, SDL_Texture* splashTexture) {
     bool waiting = true;
@@ -50,6 +50,7 @@ void drawBackground(SDL_Renderer* renderer, int cellWidth, int cellHeight, SDL_T
         SDL_RenderDrawLine(renderer, 0, y, SCREEN_WIDTH, y);
     }
 }
+
 void drawSnakeSegment(SDL_Renderer* renderer, int x, int y, int width, int height, SDL_Texture* texture,double angle) {
     SDL_Rect destRect = { x, y, width, height };
      SDL_Point center = { width / 2, height / 2 }; // center
