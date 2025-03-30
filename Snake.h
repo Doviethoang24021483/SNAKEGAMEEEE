@@ -29,6 +29,10 @@ class Snake{
      queue<UserInput> inputQueue;
      AudioManager* audioManager;
      EffectManager* effectManager;
+     float speed;
+     int pennaltyTimer;
+     static constexpr float MIN_SPEED = 0.3f;
+     float speedAccumulator; // Tích lũy tốc độ
  public:
     Snake(PlayGround* playGround_,AudioManager* audioManager_,EffectManager* effectManager);
 
@@ -49,5 +53,12 @@ class Snake{
 
     double getRotationAngle() const;
 
+    void reduceSpeed();
+
+    void update();
+
+    float getSpeed() const ;
+
+    void restoreSpeed(); // Thêm hàm mới để hồi phục tốc độ
 };
 #endif // SNAKE_H
