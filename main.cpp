@@ -40,14 +40,16 @@ const CellSize CELL_SIZE = {30,30}; //Kich thuoc o
 }
 
 void drawBackground(SDL_Renderer* renderer, int cellWidth, int cellHeight, SDL_Texture* backgroundTexture) {
-    SDL_Rect destRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+    // Vẽ nền cho khu vực chơi game (dịch xuống dưới vùng UI)
+    SDL_Rect destRect = {0, GAME_AREA_OFFSET_Y, SCREEN_WIDTH, SCREEN_HEIGHT - GAME_AREA_OFFSET_Y};
     SDL_RenderCopy(renderer, backgroundTexture, NULL, &destRect);
+
     // Vẽ lưới
     SDL_SetRenderDrawColor(renderer, 200, 200, 200, 50); // Màu xám mờ
     for (int x = 0; x < SCREEN_WIDTH; x += cellWidth) {
-        SDL_RenderDrawLine(renderer, x, 0, x, SCREEN_HEIGHT);
+        SDL_RenderDrawLine(renderer, x, GAME_AREA_OFFSET_Y, x, SCREEN_HEIGHT);
     }
-    for (int y = 0; y < SCREEN_HEIGHT; y += cellHeight) {
+    for (int y = GAME_AREA_OFFSET_Y; y < SCREEN_HEIGHT; y += cellHeight) {
         SDL_RenderDrawLine(renderer, 0, y, SCREEN_WIDTH, y);
     }
 }
@@ -193,6 +195,11 @@ int main(int argc, char* argv[]) {
         quitSDL(window, renderer, snakeTexture, snakeHeadTexture, noteTexture, wallTexture, backgroundTexture, splashScreen, noteTargetTexture,goldNoteTexture);
         return -1;
     }
+    if (!audioManager.loadGoldNoteSound("gold.mp3")) {
+        std::cerr << "Failed to load gold note sound!" << std::endl;
+        quitSDL(window, renderer, snakeTexture, snakeHeadTexture, noteTexture, wallTexture, backgroundTexture, splashScreen, noteTargetTexture, goldNoteTexture);
+        return -1;
+    }
      audioManager.setMusicVolume(30);
      audioManager.playMusic(); // Phát nhạc khi game bắt đầu
     PlayGround playGround(20, 20);
@@ -225,24 +232,19 @@ int main(int argc, char* argv[]) {
         }
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderClear(renderer);
-       // renderGame(renderer, &snake, &playGround, snakeTexture, snakeHeadTexture, noteTexture, backgroundTexture, noteTargetTexture,goldNoteTexture);
-        //rendererkk.render(snake, playGround); // Vẽ điểm số
-        snake.nextStep();
-         if (checkSnakeEatNote(&playGround, &snake)) {
-            snake.eatNote();
-        }
-        renderGame(renderer, &snake, &playGround, snakeTexture, snakeHeadTexture, noteTexture, backgroundTexture, noteTargetTexture,goldNoteTexture);
-        rendererkk.render(snake, playGround); // Vẽ điểm số
-        effectmanager.updateEffects();
-        effectmanager.drawEffects();
-        if (checkSnakeEatNote(&playGround, &snake)) {
-            snake.eatNote();
-        }
-
-        SDL_RenderPresent(renderer); // Dùng renderer hợp lệ
-        SDL_Delay(190);
+    SDL_RenderClear(renderer);
+    snake.nextStep();
+    if (checkSnakeEatNote(&playGround, &snake)) {
+        snake.eatNote();
     }
+    playGround.checkSymphonyStatus(); // Thêm dòng này để kiểm tra trạng thái bản giao hưởng
+    renderGame(renderer, &snake, &playGround, snakeTexture, snakeHeadTexture, noteTexture, backgroundTexture, noteTargetTexture, goldNoteTexture);
+    rendererkk.render(snake, playGround);
+    effectmanager.updateEffects();
+    effectmanager.drawEffects();
+    SDL_RenderPresent(renderer);
+    SDL_Delay(200);
+}
 
     waitUntilKeyPressed();
     audioManager.stopMusic();
