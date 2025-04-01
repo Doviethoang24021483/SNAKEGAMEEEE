@@ -11,19 +11,18 @@ const CellSize CELL_SIZE = {30,30};
 constexpr float Snake::MIN_SPEED; // Định nghĩa MIN_SPEED
 
 using namespace std;
-Snake::Snake(PlayGround* playGround_, AudioManager* audioManager_,EffectManager* effectManager)
-: playGround(playGround_),
-  direction(Direction::RIGHT),
-   audioManager(audioManager_),  // Khởi tạo audioManager
-    effectManager(effectManager),
-    speed(1.0f),pennaltyTimer(0),
-    speedAccumulator(0.0f)
-  {
-  int startX = playGround->getWidth()/2;
-  int startY = playGround->getHeight()/2;
-   body.push_back(Position(startX, startY));
-  }
-
+Snake::Snake(PlayGround* playGround_, AudioManager* audioManager_, EffectManager* effectManager)
+    : playGround(playGround_),
+      direction(Direction::RIGHT),
+      audioManager(audioManager_),
+      effectManager(effectManager),
+      speed(1.0f),
+      pennaltyTimer(0),
+      speedAccumulator(0.0f) {
+    int startX = playGround->getWidth() / 2;
+    int startY = (playGround->getHeight() / 2) + (GAME_AREA_OFFSET_Y / CELL_SIZE.height); // Dịch xuống
+    body.push_back(Position(startX, startY));
+}
   void Snake::processUserInput(UserInput input){
       if(input!=UserInput::NO_INPUT)
     inputQueue.push(input);
@@ -71,12 +70,11 @@ Snake::Snake(PlayGround* playGround_, AudioManager* audioManager_,EffectManager*
       int piNewX = newX*CELL_SIZE.width;
       int piNewY = newY*CELL_SIZE.height;
       Position piNewHead(piNewX,piNewY);
-
-if (!piNewHead.isInsideBox(0, 0,SCREEN_WIDTH, SCREEN_HEIGHT )) {
-    playGround->stopGame();
-    return false;
-}
-
+// Kiểm tra va chạm với biên của khu vực chơi game
+        if (!Position(piNewX, piNewY).isInsideBox(0, GAME_AREA_OFFSET_Y, SCREEN_WIDTH, SCREEN_HEIGHT)) {
+            playGround->stopGame();
+            return false;
+        }
    // Kiem tra va cham voi than ran
   for(int i=1;i<body.size();i++){
     if(newHead.getx()==body[i].getx()&&newHead.gety()==body[i].gety()){
@@ -116,7 +114,16 @@ void Snake::eatNote() {
             bool isTargetNote = (note.position.getx() == playGround->getTargetNote().position.getx() &&
                           note.position.gety() == playGround->getTargetNote().position.gety());
            if(isTargetNote == true ) restoreSpeed();
-     if ( playGround->noteSequence[playGround->currentNoteIndex] == note.value) {
+           if (playGround->isInSymphonyMode()) {
+                if (note.value == GOLD_NOTE) {
+                    playGround->incrementGoldNotesEaten();
+                    playGround->removeNote(note); // Xóa nốt vàng vừa ăn
+                    audioManager->playGoldNoteSound();
+                    effectManager->createSparkleEffect(note.position.getx() * CELL_SIZE.width, note.position.gety() * CELL_SIZE.height); // Thêm hiệu ứng lấp lánh
+                    playGround->checkSymphonyStatus();
+                    std::cout << "Gold notes eaten: " << playGround->getGoldNotesEaten() << "/" << playGround->getGoldNotesRequired() << std::endl;
+                }
+     }else if ( playGround->noteSequence[playGround->currentNoteIndex] == note.value) {
         // Ăn đúng nốt theo thứ tự
         Uint32 currentTime = SDL_GetTicks();
         Uint32 elapsedTime = currentTime - playGround->getSequenceStartTime();
@@ -126,26 +133,19 @@ void Snake::eatNote() {
         audioManager->playNoteChunk(note.value);
             effectManager->createEatEffect(note.position.getx() * CELL_SIZE.width,note.position.gety() * CELL_SIZE.height);
             playGround->setGuiding(false);
+            playGround->removeNote(note); // Xóa nốt vừa ăn
         if (playGround->currentNoteIndex >= 4) {
             // Hoàn thành bản nhạc
-            playGround->setIsSymphonyMode(true);
-            playGround->generateNotes(body);
-            //playGround->startSymphonyMode();
             playGround->addScore(50);//cong 50 diem khi hoan thanh chuoi
-            //playGround->currentNoteIndex = 0;
+            playGround->currentNoteIndex = 0;
             audioManager->playCompleteSong();
-            for (size_t i = 0; i < playGround->getNotes().size(); ++i) {
-        Note note = (playGround->getNotes())[i];
-        if (head.getx() == note.position.getx() && head.gety() == note.position.gety() && note.value == GOLD_NOTE) {
-            playGround->incrementGoldNotesEaten();
-             playGround->checkSymphonyStatus();
-        }
             //playGround->generateNotes(body);
             //playGround->startNewSequence(); // Bắt đầu chuỗi mới
-            std::cout << "Hoan thanh ban nhac!" << std::endl;
-        }
-        }
-        else {
+         playGround->setIsSymphonyMode(true);
+         playGround->startSymphonyMode();
+         playGround->generateNotes(body);
+         playGround->checkSymphonyStatus();
+        }else{
             playGround->currentNoteIndex++;
             // Bắt đầu hướng dẫn cho nốt nhạc tiếp theo
             playGround->setGuiding(true);
