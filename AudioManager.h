@@ -1,35 +1,31 @@
-#ifndef AUDIOMANAGER
-#define AUDIOMANAGER
+// AudioManager.h
+#ifndef AUDIO_MANAGER_H
+#define AUDIO_MANAGER_H
+#include <SDL_mixer.h>
+#include <map>
+#include"PlayGround.h"
 
-#include<SDL.h>
-#include<SDL_mixer.h>
-#include <string>
-#include<vector>
-#include "PlayGround.h"
- using namespace std;
 class AudioManager {
+private:
+    Mix_Music* music;
+    Mix_Chunk* failChunk;
+    Mix_Chunk* completeSong;
+    std::map<NoteValue, Mix_Chunk*> noteChunks;
+    Mix_Chunk* goldNoteSound; // Âm thanh cho nốt vàng
 public:
-    AudioManager(); // Ham khoi tao dung de thiet lap SDL_mixer
-    ~AudioManager(); // Ham huy dung de giai phong tai nguyen
-
-    bool loadMusic(const string& file);
+    AudioManager();
+    ~AudioManager();
+    bool loadMusic(const std::string& path);
+    bool loadFailChunk(const std::string& path);
+    bool loadNoteChunk(NoteValue note, const std::string& path);
+    bool loadCompleteSong(const std::string& path);
+    bool loadGoldNoteSound(const std::string& path); // Thêm hàm mới
     void playMusic();
     void stopMusic();
-    //int getBPM() const;
-     //bool loadNoteChunks(const vector<string>& files);
-    //void playRandomNoteChunk();
-     void setMusicVolume(int volume); // Dieu chinh am luong cua nhac nen
-     bool loadFailChunk( const string& file);
-     void playFailChunk();
-     bool loadNoteChunk(NoteValue note, const std::string& filePath);
+    void setMusicVolume(int volume);
+    void playFailChunk();
     void playNoteChunk(NoteValue note);
-    bool loadCompleteSong(const std::string& filePath);
     void playCompleteSong();
-private:
-    Mix_Music* music; // Luu tru file nhac nen
-    std::vector<Mix_Chunk*> noteChunks;// Luu am thanh tung not nhac
-     Mix_Chunk* failChunk;
-     Mix_Chunk* noteSounds[5];
-    Mix_Music* completeSong;
+    void playGoldNoteSound(); // Thêm hàm mới
 };
-#endif // AUDIOMANAGER
+#endif
