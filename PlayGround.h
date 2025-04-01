@@ -57,11 +57,11 @@ private:
  Uint32 sequenceTimeLimit = 10000; // 10 giây (có thể điều chỉnh)
 
  // Biến mới cho chế độ bản giao hưởng
-    bool isSymphonyMode = false; // Kiểm tra có đang ở chế độ bản giao hưởng không
-    Uint32 symphonyStartTime = 0; // Thời điểm bắt đầu bản giao hưởng
-    const Uint32 SYMPHONY_TIME_LIMIT = 50000; // 50 giây (50000ms)
-    int goldNotesEaten = 0; // Số nốt vàng đã ăn
-    const int GOLD_NOTES_REQUIRED = 20; // Số nốt vàng cần ăn để chiến thắng
+ bool isSymphonyMode = false; // Kiểm tra có đang ở chế độ bản giao hưởng không
+ Uint32 symphonyStartTime = 0; // Thời điểm bắt đầu bản giao hưởng
+ const Uint32 SYMPHONY_TIME_LIMIT = 30000; // 50 giây (50000ms)
+ int goldNotesEaten = 0; // Số nốt vàng đã ăn
+ const int GOLD_NOTES_REQUIRED = 20; // Số nốt vàng cần ăn để chiến thắng
 public:
     PlayGround(int width_=0, int height_=0); // Khoi tao san choi voi kich thuoc mac dinh la 0 0
 
