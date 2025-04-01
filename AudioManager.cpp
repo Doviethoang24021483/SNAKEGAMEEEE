@@ -2,39 +2,38 @@
 #include "AudioManager.h"
 #include <time.h>
 #include <SDL.h>
+#include "PlayGround.h"
 using namespace std;
 
-AudioManager::AudioManager() : music(nullptr), failChunk(nullptr),completeSong(nullptr) {
-    // Initialize SDL_mixer
-    if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096) == -1) {
-        std::cerr << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << std::endl;
-    }
-        srand(time(0));
-        for (int i = 0; i < 5; i++) {
-        noteSounds[i] = nullptr;
+AudioManager::AudioManager() : music(nullptr), failChunk(nullptr), completeSong(nullptr), goldNoteSound(nullptr) {
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+        std::cerr << "Mix_OpenAudio failed: " << Mix_GetError() << std::endl;
     }
 }
-
 AudioManager::~AudioManager() {
-    if (music) {
-        Mix_FreeMusic(music);
-        music = nullptr;//Dam bao ko tro vao vung nho da giai phong
+    Mix_FreeMusic(music);
+    Mix_FreeChunk(failChunk);
+    Mix_FreeChunk(completeSong);
+    Mix_FreeChunk(goldNoteSound); // Giải phóng âm thanh nốt vàng
+    for (auto& pair : noteChunks) {
+        Mix_FreeChunk(pair.second);
     }
-    for ( int i = 0 ; i < 5 ; i ++){
-        if(noteSounds[i]){
-            Mix_FreeChunk(noteSounds[i]);
-        }
+    Mix_CloseAudio();
+}
+
+bool AudioManager::loadGoldNoteSound(const std::string& path) {
+    goldNoteSound = Mix_LoadWAV(path.c_str());
+    if (goldNoteSound == nullptr) {
+        std::cerr << "Failed to load gold note sound: " << Mix_GetError() << std::endl;
+        return false;
     }
-    if (failChunk){
-       Mix_FreeChunk(failChunk);
-        failChunk = nullptr;//Dam bao ko tro vao vung nho da giai phong
+    return true;
+}
+
+void AudioManager::playGoldNoteSound() {
+    if (goldNoteSound != nullptr) {
+        Mix_PlayChannel(-1, goldNoteSound, 0);
     }
-    if (completeSong){
-       Mix_FreeMusic(completeSong);
-        completeSong= nullptr;//Dam bao ko tro vao vung nho da giai phong
-    }
-   // .clear();// clear boi vi noteChunks van giu cac con tro xoa de tranh tro vao cac vung nho loi
-    Mix_CloseAudio(); // Dong toan bo he thong am thanh tranh ro ri
 }
 
 bool AudioManager::loadMusic(const std::string& file) {
@@ -75,20 +74,20 @@ void AudioManager::setMusicVolume(int volume) {
     Mix_VolumeMusic(volume);//thay doi am thanh nhac nen
 }
 bool AudioManager::loadNoteChunk(NoteValue note, const std::string& filePath){
-     noteSounds[note] = Mix_LoadWAV(filePath.c_str());
-    if (noteSounds[note] == nullptr) {
+     noteChunks[note] = Mix_LoadWAV(filePath.c_str());
+    if (noteChunks[note] == nullptr) {
         std::cerr << "Failed to load note sound effect: " << filePath << " SDL_mixer Error: " << Mix_GetError() << std::endl;
         return false;
     }
     return true;
 }
  void AudioManager::playNoteChunk(NoteValue note){
-    if (noteSounds[note] != nullptr) {
-        Mix_PlayChannel(-1, noteSounds[note], 0);
+    if (noteChunks[note] != nullptr) {
+        Mix_PlayChannel(-1, noteChunks[note], 0);
     }
 }
  bool AudioManager::loadCompleteSong(const std::string& filePath){
-    completeSong = Mix_LoadMUS(filePath.c_str());
+    completeSong = Mix_LoadWAV(filePath.c_str());
      if (completeSong == nullptr) {
         std::cerr << "Failed to load complete song: " << filePath << " SDL_mixer Error: " << Mix_GetError() << std::endl;
         return false;
@@ -97,7 +96,7 @@ bool AudioManager::loadNoteChunk(NoteValue note, const std::string& filePath){
  }
 void AudioManager::playCompleteSong(){
     if (completeSong != nullptr) {
-          Mix_PlayMusic(completeSong,1);
+       Mix_PlayChannel(-1, completeSong, 0);
     }
 }
 
