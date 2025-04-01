@@ -5,7 +5,9 @@
 #include <queue>
 #include "AudioManager.h"
 #include "EffectManager.h"
-
+#include <vector>
+#include<queue>
+using namespace std;
 enum Direction{
   UP,
   DOWN,
