@@ -1,84 +1,94 @@
-
-#include "EffectManager.h" // Include header file của class
-#include <cmath>   //Tính toán hình học
-#include <cstdlib> // Cấp phát số ngẫu nhiên
+#include "EffectManager.h"
+#include <cmath>
+#include <cstdlib>
 #include <iostream>
+#include "PlayGround.h"
+#include "SDL_utils.h"
+const CellSize CELL_SIZE = {30,30};
 // Hàm khởi tạo của class
 EffectManager::EffectManager(SDL_Renderer* renderer) : renderer(renderer) {
-    // Gán SDL_Renderer được truyền vào cho biến thành viên renderer
 }
 
 // Hàm hủy của class
 EffectManager::~EffectManager() {
-    // Không cần làm gì ở đây vì vector particles tự động giải phóng bộ nhớ khi bị hủy
 }
 
 // Hàm tạo một hạt mới
-Particle createParticle(int x, int y, SDL_Color color) {
-    Particle particle; // Tạo một đối tượng Particle mới
+Particle createParticle(int x, int y, SDL_Color color, int lifetime = 10) {
+    Particle particle;
 
-    // Gán vị trí cho hạt
     particle.x = x;
     particle.y = y;
 
-    // Tạo vận tốc ngẫu nhiên cho hạt
-   float angle = ((float)rand() / RAND_MAX) * 2 * M_PI; // Random angle in radians
-    float speed = ((float)rand() / RAND_MAX) * 2.0f + 1.0f; // Random speed
+    float angle = ((float)rand() / RAND_MAX) * 2 * M_PI;
+    float speed = ((float)rand() / RAND_MAX) * 2.0f + 1.0f;
 
     particle.vx = cos(angle) * speed;
     particle.vy = sin(angle) * speed;
-    // Gán thời gian tồn tại cho hạt
-    particle.lifetime = 100; // Adjust lifetime as needed
 
-    // Gán màu sắc cho hạt
+    particle.lifetime = lifetime; // Thời gian tồn tại của hạt
     particle.color = color;
 
-    return particle; // Trả về hạt đã tạo
+    return particle;
 }
 
-// Hàm tạo hiệu ứng ăn nốt nhạc
+// Hàm tạo hiệu ứng ăn nốt nhạc thông thường
 void EffectManager::createEatEffect(int x, int y) {
-    int particleCount = 50; // Số lượng hạt trong hiệu ứng
-
-    SDL_Color particleColor = {255, 255, 0, 255}; // Màu vàng
-
-    // Tạo các hạt và thêm chúng vào vector particles
+    int particleCount = 100;
+    SDL_Color particleColor = {255, 255, 0, 255}; // Màu vàng cho nốt thông thường
     for (int i = 0; i < particleCount; ++i) {
-        particles.push_back(createParticle(x, y, particleColor)); // Tạo và thêm hạt vào vector
+        particles.push_back(createParticle(x, y, particleColor));
+    }
+}
+
+// Hàm tạo hiệu ứng lấp lánh cho nốt vàng
+void EffectManager::createSparkleEffect(int x, int y) {
+    int particleCount = 150; // Tăng số lượng hạt để lấp lánh hơn
+    SDL_Color particleColor = {255, 215, 0, 255}; // Màu vàng sáng cho nốt vàng
+    for (int i = 0; i < particleCount; ++i) {
+        // Dịch tọa độ y xuống dưới vùng UI và đặt hạt ở giữa ô
+        Particle particle = createParticle(x + CELL_SIZE.width / 2, y + CELL_SIZE.height / 2 + GAME_AREA_OFFSET_Y, particleColor, 20); // Tăng thời gian tồn tại
+        particles.push_back(particle);
     }
 }
 
 // Hàm cập nhật trạng thái của tất cả các hiệu ứng
 void EffectManager::updateEffects() {
-    // Lặp qua tất cả các hạt trong vector particles
-     for (size_t i = 0; i < particles.size(); ++i) {
-           particles[i].x += particles[i].vx;
+    for (size_t i = 0; i < particles.size();) {
+        particles[i].x += particles[i].vx;
         particles[i].y += particles[i].vy;
         particles[i].lifetime--;
-           if (particles[i].lifetime <= 0) {
-                particles.erase(particles.begin()+i);
 
-            }
+        if (particles[i].lifetime <= 0) {
+            particles.erase(particles.begin() + i);
+        } else {
+            ++i;
+        }
     }
 }
 
-// Hàm vẽ một hạt lên màn hình
+// Hàm vẽ một hạt
 void drawParticle(SDL_Renderer* renderer, const Particle& particle) {
-    // Kiểm tra xem hạt còn tồn tại hay không
     if (particle.lifetime > 0) {
-        // Đặt màu vẽ là màu của hạt với độ trong suốt dựa trên thời gian tồn tại
-        SDL_SetRenderDrawColor(renderer, particle.color.r, particle.color.g, particle.color.b, (Uint8)((particle.lifetime / 100.0f) * 255));
+        // Tính độ trong suốt dựa trên thời gian tồn tại
+        Uint8 alpha = (Uint8)((particle.lifetime / 20.0f) * 255); // Điều chỉnh dựa trên lifetime tối đa
+        SDL_SetRenderDrawColor(renderer, particle.color.r, particle.color.g, particle.color.b, alpha);
 
-        // Vẽ một điểm tại vị trí của hạt
-        SDL_RenderDrawPoint(renderer, (int)particle.x, (int)particle.y);
+        // Vẽ hình tròn thay vì điểm
+        int radius = 3;
+        for (int w = -radius; w <= radius; w++) {
+            for (int h = -radius; h <= radius; h++) {
+                if (w * w + h * h <= radius * radius) {
+                    SDL_RenderDrawPoint(renderer, (int)particle.x + w, (int)particle.y + h);
+                }
+            }
+        }
     }
 }
 
 // Hàm vẽ tất cả các hiệu ứng lên màn hình
 void EffectManager::drawEffects() {
-    // Lặp qua tất cả các hạt trong vector particles
     for (const auto& particle : particles) {
-        // Vẽ hạt lên màn hình
         drawParticle(renderer, particle);
     }
 }
