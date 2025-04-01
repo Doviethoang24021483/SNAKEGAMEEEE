@@ -22,7 +22,7 @@ public:
 
     // Hàm tạo hiệu ứng ăn nốt nhạc
     void createEatEffect(int x, int y); // Truyền vào vị trí (x, y) của nốt nhạc bị ăn
-
+    void createSparkleEffect(int x, int y); // Hiệu ứng lấp lánh cho nốt vàng (mới)
     // Hàm cập nhật trạng thái của tất cả các hiệu ứng
     void updateEffects();
 
