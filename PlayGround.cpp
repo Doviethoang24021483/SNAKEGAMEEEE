@@ -68,13 +68,16 @@ const std::vector<Note>& PlayGround::getNotes() const {
 
 void PlayGround::generateNotes(const std::vector<Position>& snakeBody) {
     notes.clear(); // Xóa các nốt nhạc cũ
-    if(isSymphonyMode==true){
-        for(int i = 0 ; i < GOLD_NOTES_REQUIRED; i++){
-           Note newNote;
+   if (isSymphonyMode == true) {
+    for (int i = 0; i < GOLD_NOTES_REQUIRED; i++) {
+        Note newNote;
         bool validPosition = false;
         while (!validPosition) {
-           int x = rand() % (SCREEN_WIDTH / CELL_SIZE.width);
-            int y = rand() % (SCREEN_HEIGHT / CELL_SIZE.height);
+            int x = rand() % (SCREEN_WIDTH / CELL_SIZE.width);
+            // Sửa lại tọa độ y để không nằm trong vùng UI
+            int playableHeightInCells = (SCREEN_HEIGHT - GAME_AREA_OFFSET_Y) / CELL_SIZE.height;
+            int offsetYInCells = (GAME_AREA_OFFSET_Y + CELL_SIZE.height - 1) / CELL_SIZE.height; // Làm tròn lên để bắt đầu từ ô đầu tiên dưới vùng UI
+            int y = (rand() % playableHeightInCells) + offsetYInCells;
             newNote.position = Position(x, y);
             validPosition = true;
             for (const Position& segment : snakeBody) {
@@ -83,23 +86,27 @@ void PlayGround::generateNotes(const std::vector<Position>& snakeBody) {
                     break;
                 }
             }
-           for (const Note& note : notes) {
+            for (const Note& note : notes) {
                 if (note.position.getx() == newNote.position.getx() && note.position.gety() == newNote.position.gety()) {
                     validPosition = false;
                     break;
                 }
             }
+            newNote.value = GOLD_NOTE;
         }
-        newNote.value = GOLD_NOTE;
         notes.push_back(newNote);
     }
-        }
+}
+        else {
     for (int i = 0; i < NUM_NOTES; ++i) {
         Note newNote;
         bool validPosition = false;
         while (!validPosition) {
-           int x = rand() % (SCREEN_WIDTH / CELL_SIZE.width);
-            int y = rand() % (SCREEN_HEIGHT / CELL_SIZE.height);
+            int x = rand() % (SCREEN_WIDTH / CELL_SIZE.width);
+            // Sửa lại tọa độ y để không nằm trong vùng UI
+            int playableHeightInCells = (SCREEN_HEIGHT - GAME_AREA_OFFSET_Y) / CELL_SIZE.height;
+            int offsetYInCells = (GAME_AREA_OFFSET_Y + CELL_SIZE.height - 1) / CELL_SIZE.height; // Làm tròn lên để bắt đầu từ ô đầu tiên dưới vùng UI
+            int y = (rand() % playableHeightInCells) + offsetYInCells;
             newNote.position = Position(x, y);
             validPosition = true;
             for (const Position& segment : snakeBody) {
@@ -108,16 +115,17 @@ void PlayGround::generateNotes(const std::vector<Position>& snakeBody) {
                     break;
                 }
             }
-           for (const Note& note : notes) {
+            for (const Note& note : notes) {
                 if (note.position.getx() == newNote.position.getx() && note.position.gety() == newNote.position.gety()) {
                     validPosition = false;
                     break;
                 }
             }
         }
-        newNote.value = static_cast<NoteValue>(rand() % 5);//Chuyen doi so nguyen ngau nhien tu NUM_NOTE_VALUES - 1 thanh 1 gia tri thuoc kieu NoteValue
+        newNote.value = static_cast<NoteValue>(rand() % 5);
         notes.push_back(newNote);
     }
+}
         if (!notes.empty()) {
         int randomIndex = rand() % notes.size();
         targetNote = notes[randomIndex]; //Lay random 1 not nhac trong notes lam not muc tieu
@@ -127,7 +135,7 @@ void PlayGround::generateNotes(const std::vector<Position>& snakeBody) {
     setGuiding(true);
     setGuideStartTime(SDL_GetTicks());
     startNewSequence(); // Bắt đầu đếm thời gian
-}
+        }
 
 void PlayGround::removeNote(Note note) {
     for (size_t i = 0; i < notes.size(); ++i) {
@@ -172,12 +180,18 @@ void PlayGround::checkSymphonyStatus() {
 
     Uint32 currentTime = SDL_GetTicks();
     Uint32 elapsedTime = currentTime - symphonyStartTime;
-
-    if ( goldNotesEaten >= GOLD_NOTES_REQUIRED) {
-        status = GAMEWON;
+    if (elapsedTime <= SYMPHONY_TIME_LIMIT && goldNotesEaten >= GOLD_NOTES_REQUIRED) {
+        isSymphonyMode = false;
+        addScore(500);
         gameRun = false;
-        std::cout << "You win! Collected all gold notes in time!" << std::endl;
-    } else if (elapsedTime >= SYMPHONY_TIME_LIMIT) {
-        endSymphonyMode();
+        std::cout << "YOU WIN" << std::endl;
+        stopGame();
+    } else if (elapsedTime >= SYMPHONY_TIME_LIMIT || notes.empty()) { // Thêm điều kiện notes.empty()
+        isSymphonyMode = false;
+        goldNotesEaten = 0;
+        notes.clear();
+        startNewSequence();
+        generateNotes({}); // Tạo lại các nốt thông thường
+        std::cout << "Symphony Mode ended! Returning to normal mode." << std::endl;
     }
 }
