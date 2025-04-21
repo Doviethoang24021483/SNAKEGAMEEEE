@@ -1,5 +1,5 @@
 
-#include<iostream>
+#include <iostream>
 #include "PlayGround.h"
 #include "Position.h"
 #include<cassert>
@@ -151,6 +151,9 @@ void PlayGround::removeNote(Note note) {
 Note PlayGround::getTargetNote(){
  return targetNote;
  }
+GameStatus PlayGround::getStatus(){
+return status;
+}
 
 NoteValue PlayGround::getNoteSequence(int index) {       //Lay gia tri not nhac trong chuoi nhac
     return noteSequence[index];
@@ -185,15 +188,9 @@ void PlayGround::checkSymphonyStatus() {
     isSymphonyMode = false;
     addScore(200);
     gameRun = false;
+    status = GAMEWON;
     std::cout << "YOU WIN" << std::endl;
-    bool playAgain = rendererkk->showMessage("YOU WIN", {0, 255, 0, 255});
-    stopGame();
-    if (playAgain) {
-        reset();
-        // Rắn sẽ được reset trong main.cpp
-    } else {
-        gameRun = false; // Đảm bảo thoát game nếu không chơi lại
-    }
+
 }   else if( elapsedTime > SYMPHONY_TIME_LIMIT && goldNotesEaten < GOLD_NOTES_REQUIRED){
         reset();
 }
@@ -212,3 +209,4 @@ void PlayGround::reset() {
     startNewSequence();
     generateNotes({}); // Tạo lại các nốt thông thường
 }
+
