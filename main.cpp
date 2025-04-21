@@ -11,7 +11,6 @@
 #include "Renderer.h"
 
 const CellSize CELL_SIZE = {30,30}; //Kich thuoc o
-
     void showSplashScreen(SDL_Renderer* renderer, SDL_Texture* splashTexture) {
     bool waiting = true;
     SDL_Event event;
@@ -153,6 +152,7 @@ int main(int argc, char* argv[]) {
     SDL_Texture* noteTargetTexture = nullptr;
     SDL_Texture* goldNoteTexture = nullptr; // Texture cho nốt vàng
     initSDL(window, renderer);
+    rendererkk = new RendererDiem(renderer); // Khởi tạo rendererkk
     AudioManager audioManager;
     EffectManager effectmanager(renderer);
     if (!audioManager.loadMusic("music.mp3")) {
@@ -220,32 +220,47 @@ int main(int argc, char* argv[]) {
     showSplashScreen(renderer, splashScreen);
     SDL_Event event;
     RendererDiem rendererkk(renderer); // Truyền renderer hợp lệ
+bool quitGame = false;
+    while (!quitGame) {
+        SDL_Event event;
+        while (playGround.isGameRun()) {
+            while (SDL_PollEvent(&event)) {
+                if (event.type == SDL_QUIT) {
+                    playGround.setGameRun(false);
+                } else {
+                    UserInput input = getUserInputFromEvent(event);
+                    snake.processUserInput(input);
+                }
+            }
 
-    while (playGround.isGameRun()) {
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                playGround.setGameRun(false);
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+            SDL_RenderClear(renderer);
+            snake.nextStep();
+            if (checkSnakeEatNote(&playGround, &snake)) {
+                snake.eatNote();
+            }
+            playGround.checkSymphonyStatus();
+            if (!playGround.isGameRun()) {
+           if(playGround.getStatus() == GAMEWON){
+              bool playAgain = rendererkk.showMessage("YOU WIN", {0, 255, 0, 255});
+            if (playAgain) {
+                snake.reset();
+                playGround.reset();
             } else {
-                UserInput input = getUserInputFromEvent(event);
-                snake.processUserInput(input);
+                quitGame = true;
             }
         }
-
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderClear(renderer);
-    snake.nextStep();
-    if (checkSnakeEatNote(&playGround, &snake)) {
-        snake.eatNote();
     }
-    playGround.checkSymphonyStatus(); // Thêm dòng này để kiểm tra trạng thái bản giao hưởng
-    renderGame(renderer, &snake, &playGround, snakeTexture, snakeHeadTexture, noteTexture, backgroundTexture, noteTargetTexture, goldNoteTexture);
-    rendererkk.render(snake, playGround);
-    effectmanager.updateEffects();
-    effectmanager.drawEffects();
-    SDL_RenderPresent(renderer);
-    SDL_Delay(200);
-}
+            renderGame(renderer, &snake, &playGround, snakeTexture, snakeHeadTexture, noteTexture, backgroundTexture, noteTargetTexture, goldNoteTexture);
+            rendererkk.render(snake, playGround);
+            effectmanager.updateEffects();
+            effectmanager.drawEffects();
+            SDL_RenderPresent(renderer);
+            SDL_Delay(200);
+        }
 
+
+    }
     waitUntilKeyPressed();
     audioManager.stopMusic();
     audioManager.~AudioManager();
