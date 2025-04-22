@@ -85,7 +85,7 @@ Sao chép
 
 ## Hình ảnh minh họa
 
-(TODO: Thêm hình ảnh minh họa gameplay tại đây.)
+![Ảnh chụp gameplay](screenshot1.png)
 
 ## Đóng góp
 
