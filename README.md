@@ -85,7 +85,7 @@ Sao chép
 
 ## Hình ảnh minh họa
 
-![Ảnh chụp gameplay](screenshot1.png)
+![Ảnh chụp gameplay](ScreenShot 2025-04-22 234013.png)
 
 ## Đóng góp
 
