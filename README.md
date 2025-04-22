@@ -82,7 +82,9 @@ Sao chép
 - `Renderer.h`: (Giả định) Vẽ game bằng SDL2.
 - `AudioManager.h`: (Giả định) Quản lý âm thanh.
 - `EffectManager.h`: (Giả định) Quản lý hiệu ứng hình ảnh.
+## Video Demo
 
+[![RedmiGame Gameplay Demo](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://drive.google.com/file/d/1wJZqMY2ubDd3J9o0iFIhTOKgP8QE-0pd/view?usp=drive_link)
 ## Hình ảnh minh họa
 
 ![Ảnh chụp gameplay](screenshot1.png)
