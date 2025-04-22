@@ -41,11 +41,10 @@ struct Note {
     Position position;
     NoteValue value;
 };
-
+class Snake;
 class PlayGround {
 
 private:
-
  int score;             //diem so
  int width, height;     //Kich thuoc san choi
  GameStatus status;     //Trang thai game
@@ -112,7 +111,7 @@ public:
     void resetGoldNotesEaten() { goldNotesEaten = 0; }                       //Dat lai so note da an
     int getGoldNotesRequired() const { return GOLD_NOTES_REQUIRED; }         //Tra ve so not can an
     void checkSymphonyStatus();                                              //Xu li ket thuc giao huong bat dau lai binh thuong hay chien thang hay thua
-
+    GameStatus getStatus();
 
 
     void reset();                                                            //Dat lai trang thai game
