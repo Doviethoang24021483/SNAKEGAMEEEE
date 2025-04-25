@@ -192,7 +192,9 @@ void PlayGround::checkSymphonyStatus() {
     std::cout << "YOU WIN" << std::endl;
 
 }   else if( elapsedTime > SYMPHONY_TIME_LIMIT && goldNotesEaten < GOLD_NOTES_REQUIRED){
-        reset();
+      int x = score;
+      reset();
+      score+=x;
 }
 }
 void PlayGround::reset() {
