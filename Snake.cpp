@@ -117,6 +117,7 @@ void Snake::eatNote() {
            if (playGround->isInSymphonyMode()) {
                 if (note.value == GOLD_NOTE) {
                     playGround->incrementGoldNotesEaten();
+                    playGround->addScore(100);
                     playGround->removeNote(note); // Xóa nốt vàng vừa ăn
                     audioManager->playGoldNoteSound();
                     effectManager->createSparkleEffect(note.position.getx() * CELL_SIZE.width, note.position.gety() * CELL_SIZE.height); // Thêm hiệu ứng lấp lánh
