@@ -77,3 +77,24 @@ Nếu không muốn biên dịch, bạn có thể nhảy đến Bước 5 để 
 Chờ một chút rồi ấn phím bất kì hoặc kích chuột để bắt đầu chơi game.
 
 ![image](splashscreen.png)
+
+# 2. Các thành phần trong game:
+
+-Đầu rắn mang âm hưởng âm nhạc
+
+ ![image](snake_head.png)
+
+-Đốt rắn là những phím đàn piano 
+![image](snake_body.png)
+
+-Note nhạc thường màu đỏ : Ăn đúng nốt sẽ được thêm độ dài , tăng điểm , phát âm thanh của note đó, sai nốt rắn không dài ra, bị chậm lại , phát âm thanh fail
+
+![image](note.png)
+
+-Note nhạc tăng tốc độ 
+
+![image](noteTarget.png)
+
+-Note nhac vàng : Trong chế độ bản giao hưởng ăn mỗi lần được cộng 100 điểm 
+ 
+ ![image](goldNote.png)
