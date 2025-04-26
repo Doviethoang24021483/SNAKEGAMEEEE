@@ -108,6 +108,8 @@ Chờ một chút rồi ấn phím bất kì hoặc kích chuột để bắt đ
      
      - Điều khiển rắn sang trái, sang phải, lên xuống bằng cách dùng phím tương ứng
 
+     - Cố gắng không cho rắn đâm vào tường và vào thân 
+     
      - Cố gắng ăn nốt đúng thứ tứ ( nốt đang rung ) để có cơ hội tích lũy đủ chuỗi nốt 5 nốt nhạc để vào được bản giao hưởng
 
      - Ăn đúng nốt nhạc rắn sẽ dài ra , đồng thời phát âm thanh của note nhạc đó , vằ được cộng thêm 10 điểm và bắn pháo hoa màu vàng
@@ -122,6 +124,15 @@ Chờ một chút rồi ấn phím bất kì hoặc kích chuột để bắt đ
 
 -**Chế độ bản giao hưởng(SYMPHONY)**
 
-     -
+  **Mục tiêu** :
+       
+       -Ăn hết 20 nốt nhạc vàng trong vòng 30 giây 
+         
+       -Nếu không hết quay lại chế độ thường để chơi lại để tiếp tục cố gẳng để chinh phục bản giao hưởng ở lần tiếp theo
+
+ Hình ảnh sơ bộ chế độ bản giao hưởng (SYMPHONY)
+
+ 
+       
 
    
