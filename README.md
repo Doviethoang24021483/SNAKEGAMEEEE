@@ -136,6 +136,8 @@ Chờ một chút rồi ấn phím bất kì hoặc kích chuột để bắt đ
 
 ![image](giaohuonggg.png)
 
+![image](phaobong2.png)
+
  
        
 
