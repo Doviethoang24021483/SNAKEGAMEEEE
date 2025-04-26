@@ -15,23 +15,6 @@ Trong **MUSICAL SNAKE**, bạn sẽ điều khiển một con rắn di chuyển 
 - **Hệ thống điểm số và UI**: Hiển thị điểm số, thời gian, số nốt đã ăn trong chế độ giao hưởng trên màn hình, thông báo "YOU WIN" (màu xanh lá) khi thắng, "YOU LOSE" (màu đỏ) khi thua.  
 - **Màn hình chào**: Hiển thị màn hình chào (`splashScreen`) khi khởi động game, tạo ấn tượng chuyên nghiệp.
 
-## Cài đặt
-
-Để chơi **MUSICAL SNAKE**, bạn cần biên dịch mã nguồn trên máy tính của mình. Hãy làm theo các bước sau:
-
-### Yêu cầu
-
-- **Trình biên dịch C++**: g++ hoặc bất kỳ trình biên dịch C++ nào (ví dụ: MinGW cho Windows, GCC cho Linux/Mac).
-- **Thư viện SDL2**:
-  - SDL2
-  - SDL2_image
-  - SDL2_ttf
-  - SDL2_mixer
-- Cài đặt SDL2 trên hệ điều hành của bạn:
-  - **Ubuntu/Linux**: Chạy lệnh `sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev`.
-  - **Windows**: Tải thư viện SDL2 từ [libsdl.org](https://www.libsdl.org/) và liên kết chúng trong trình biên dịch.
-  - **macOS**: Sử dụng Homebrew: `brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer`.
-
 ## Các bước cài đặt và chạy game
 
 Để chạy game **Rắn Săn Mồi**, bạn cần chuẩn bị môi trường và làm theo các bước sau:
@@ -47,19 +30,18 @@ Trong **MUSICAL SNAKE**, bạn sẽ điều khiển một con rắn di chuyển 
   - `SDL2_mixer`  
 
 #### Cài đặt SDL2
-- **Ubuntu/Linux**:  
-  Cài đặt các thư viện SDL2:  
-  ```bash
-  sudo apt-get update
-  sudo apt-get install g++ libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev
-Kiểm tra cài đặt:
 
+- **Ubuntu/Linux**:  
+  - Cài đặt các thư viện SDL2:  
+    ```bash
+    sudo apt-get update
+    sudo apt-get install g++ libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev
+Kiểm tra cài đặt:
 bash
 
 Sao chép
 sdl2-config --version
 Nếu lệnh trên trả về phiên bản SDL2 (ví dụ: 2.0.12), bạn đã cài đặt thành công.
-
 Windows:
 Tải các thư viện SDL2 từ libsdl.org:
 SDL2-devel-*.zip (SDL2).
@@ -69,24 +51,23 @@ SDL2_mixer-devel-*.zip (SDL2_mixer).
 Giải nén và đặt vào một thư mục, ví dụ: C:\SDL2.
 Cấu hình MinGW: Đảm bảo g++ đã được cài đặt (tải từ MinGW).
 Thêm đường dẫn C:\SDL2\bin vào biến môi trường Path để chạy file thực thi.
-macOS: Sử dụng Homebrew để cài đặt:
+macOS:
+Sử dụng Homebrew để cài đặt:
 bash
 
 Sao chép
 brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer
 2. Tải mã nguồn từ repository
 Clone repository từ GitHub:
-
 bash
 
 Sao chép
 git clone https://github.com/DovietHoang24021483/SNAKEGAMEEEE.git
 cd SNAKEGAMEEEE
-Lưu ý: Đảm bảo tất cả file tài nguyên (hình ảnh: snake_head.png, note.png, ...; âm thanh: C.mp3, music.mp3, ...) đã được tải về cùng mã nguồn. Các file này nằm trong thư mục gốc của repository.
-
+Lưu ý:
+Đảm bảo tất cả file tài nguyên (hình ảnh: snake_head.png, note.png, ...; âm thanh: C.mp3, music.mp3, ...) đã được tải về cùng mã nguồn. Các file này nằm trong thư mục gốc của repository.
 3. Biên dịch mã nguồn
 Biên dịch game bằng g++. Sử dụng lệnh phù hợp với hệ điều hành của bạn:
-
 Ubuntu/Linux hoặc macOS (nếu SDL2 cài đặt toàn cục):
 bash
 
@@ -103,7 +84,6 @@ Lưu ý:
 Nếu gặp lỗi biên dịch (ví dụ: "undefined reference to SDL_..."), kiểm tra lại đường dẫn thư viện hoặc cài đặt SDL2.
 4. Chạy game
 Chạy file thực thi vừa biên dịch:
-
 Linux/macOS:
 bash
 
@@ -114,8 +94,8 @@ bash
 
 Sao chép
 RắnSănMồi.exe
-Lưu ý: Nếu gặp lỗi "SDL2.dll not found" trên Windows, sao chép file SDL2.dll, SDL2_image.dll, SDL2_ttf.dll, SDL2_mixer.dll từ thư mục C:\SDL2\bin vào thư mục chứa file RắnSănMồi.exe.
-
+Lưu ý:
+Nếu gặp lỗi "SDL2.dll not found" trên Windows, sao chép file SDL2.dll, SDL2_image.dll, SDL2_ttf.dll, SDL2_mixer.dll từ thư mục C:\SDL2\bin vào thư mục chứa file RắnSănMồi.exe.
 
 ## Cách chơi
 
