@@ -91,6 +91,10 @@ Chờ một chút rồi ấn phím bất kì hoặc kích chuột để bắt đ
 
 ![image](note.png)
 
+-BackGround nhẹ nhàng , thanh thoát , mang tính giải stress khi hòa cùng âm nhạc đong thời màu nhẹ giúp làm nổi nốt nhạc và rắn 
+
+![image](background.png)
+
 -Note nhạc tăng tốc độ 
 
 ![image](noteTarget.png)
