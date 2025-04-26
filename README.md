@@ -36,46 +36,8 @@
     cd SNAKEGAMEEEE
 Hoặc chọn Code -> Download ZIP (khoảng 20MB, tùy thuộc vào kích thước).
 Tất cả code nằm trong thư mục gốc (các file như main.cpp, PlayGround.cpp, Snake.cpp, ...).
-Nếu không muốn biên dịch, bạn có thể nhảy đến Bước 5 để chơi ngay.
+Nếu không muốn bichuột để bắt đầu chơi game.
 
-**Bước 2**: Cài đặt MinGW
-
-   -Cài đặt MinGW để có trình biên dịch g++. Bạn có thể tải phiên bản MinGW-W64 từ sourceforge.net.
-   
-   -Lưu ý:
-        -Đảm bảo g++ được thêm vào biến môi trường Path để sử dụng trong command line.
-
-**Bước 3**: Cài đặt thư viện SDL2
-       
-       -Cần cài các thư viện SDL2 (SDL2, SDL2_image, SDL2_ttf, SDL2_mixer). Xem chi tiết ở phần Các bước cài đặt và chạy game bên dưới.
-
-**Bước 4**: Biên dịch game
-   
-   -Mở terminal (hoặc Command Prompt) trong thư mục chứa các file code.
-  
-   -Sử dụng lệnh biên dịch phù hợp:
-  
-   -Windows:
-     
-      -g++ -o RắnSănMồi main.cpp PlayGround.cpp Snake.cpp -I"C:/SDL2/include" -L"C:/SDL2/lib" -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
-   
-   -Linux/macOS:
-      
-      -g++ -o RắnSănMồi main.cpp PlayGround.cpp Snake.cpp -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
-
-**Bước 5**: Chạy game
-      
-      -Chạy file thực thi:
-      
-      -Windows: RắnSănMồi.exe
-      
-      -Linux/macOS: ./RắnSănMồi
-
-**Lưu ý**: Nếu gặp lỗi "SDL2.dll not found" trên Windows, sao chép các file .dll (SDL2.dll, SDL2_image.dll, SDL2_ttf.dll, SDL2_mixer.dll) từ thư mục C:\SDL2\bin vào thư mục chứa file RắnSănMồi.exe.
-
-# 1. Bắt đầu game
-
-Chờ một chút rồi click vào nút “CLICK TO START!” để bắt đầu chơi game.
 ![image](splashscreen.png)
 
 
