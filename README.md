@@ -76,7 +76,7 @@ Nếu không muốn biên dịch, bạn có thể nhảy đến Bước 5 để 
 
 Chờ một chút rồi ấn phím bất kì hoặc kích chuột để bắt đầu chơi game.
 
-![image](splashscreen.png)
+![image](tada.png)
 
 # 2. Các thành phần trong game:
 
