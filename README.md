@@ -103,3 +103,21 @@ Chờ một chút rồi ấn phím bất kì hoặc kích chuột để bắt đ
 
 ![image](pink.png)
 
+# 3. Cách chơi 
+ -**Chế độ thường**
+     
+     - Điều khiển rắn sang trái, sang phải, lên xuống bằng cách dùng phím tương ứng
+
+     - Cố gắng ăn nốt đúng thứ tứ ( nốt đang rung ) để có cơ hội tích lũy đủ chuỗi nốt 5 nốt nhạc để vào được bản giao hưởng
+
+     - Ăn đúng nốt nhạc rắn sẽ dài ra , đồng thời phát âm thanh của note nhạc đó , vằ được cộng thêm 10 điêm 
+
+     - Tránh ăn sai nốt nhạc rắn sẽ ko dài ra , đồng thời tốc độ bị giảm và ko được cộng điểm 
+
+     -Hình ảnh sơ bộ chế độ thường 
+
+     ![image](
+
+-**Chế độ bản giao hưởng(SYMPHONY)**
+
+   
