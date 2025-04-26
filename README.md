@@ -127,10 +127,14 @@ Chờ một chút rồi ấn phím bất kì hoặc kích chuột để bắt đ
   **Mục tiêu** :
        
        -Ăn hết 20 nốt nhạc vàng trong vòng 30 giây 
+
+       -Ăn một nốt sẽ cộng 100 điểm và bắn pháo bông lớn ăn đủ 20 cộng 500 điểm
          
        -Nếu không hết quay lại chế độ thường để chơi lại để tiếp tục cố gẳng để chinh phục bản giao hưởng ở lần tiếp theo
 
  Hình ảnh sơ bộ chế độ bản giao hưởng (SYMPHONY)
+
+![image](giaohuong.png)
 
  
        
