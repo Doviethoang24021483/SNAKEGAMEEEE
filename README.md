@@ -72,3 +72,32 @@ Nếu không muốn biên dịch, bạn có thể nhảy đến Bước 5 để 
       -Linux/macOS: ./RắnSănMồi
 
 **Lưu ý**: Nếu gặp lỗi "SDL2.dll not found" trên Windows, sao chép các file .dll (SDL2.dll, SDL2_image.dll, SDL2_ttf.dll, SDL2_mixer.dll) từ thư mục C:\SDL2\bin vào thư mục chứa file RắnSănMồi.exe.
+
+# 1. Bắt đầu game
+
+Chờ một chút rồi click vào nút “CLICK TO START!” để bắt đầu chơi game.
+![image](
+
+![ezgif com-video-to-gif](resources/preview/loading.gif)
+
+</div>
+
+
+Khi vào game lần đầu, người chơi hãy nhập tên mình để bắt đầu trò chơi. Sau đó click “OK” hoặc nhấn phím Enter để tiếp
+tục.
+
+<div style="text-align: center;">
+
+![image](resources/preview/name.png)
+
+</div>
+
+
+
+Và người chơi sẽ ngay lập tức nhận được 1 cây đầu tiên - Peashooter
+<div style="text-align: center;">
+
+![image](resources/preview/first_plant.png)
+
+</div>
+
