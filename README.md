@@ -134,7 +134,7 @@ Chờ một chút rồi ấn phím bất kì hoặc kích chuột để bắt đ
 
  Hình ảnh sơ bộ chế độ bản giao hưởng (SYMPHONY)
 
-![image](giaohuong.png)
+![image](giaohuonggg.png)
 
  
        
