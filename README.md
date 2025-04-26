@@ -99,7 +99,7 @@ Chờ một chút rồi ấn phím bất kì hoặc kích chuột để bắt đ
  
  ![image](gold_note.png)
 
- -BackGround nhẹ nhàng , thanh thoát , mang tính giải stress khi hòa cùng âm nhạc đong thời màu nhẹ giúp làm nổi nốt nhạc và rắn 
+ -BackGround nhẹ nhàng , thanh thoát , mang tính giải stress khi hòa cùng âm nhạc đồng thời màu nhẹ giúp làm nổi nốt nhạc và rắn 
 
 ![image](pink.png)
 
@@ -110,7 +110,8 @@ Chờ một chút rồi ấn phím bất kì hoặc kích chuột để bắt đ
 
      - Cố gắng ăn nốt đúng thứ tứ ( nốt đang rung ) để có cơ hội tích lũy đủ chuỗi nốt 5 nốt nhạc để vào được bản giao hưởng
 
-     - Ăn đúng nốt nhạc rắn sẽ dài ra , đồng thời phát âm thanh của note nhạc đó , vằ được cộng thêm 10 điêm 
+     - Ăn đúng nốt nhạc rắn sẽ dài ra , đồng thời phát âm thanh của note nhạc đó , vằ được cộng thêm 10 điểm và bắn pháo hoa màu vàng
+![image](
 
      - Tránh ăn sai nốt nhạc rắn sẽ ko dài ra , đồng thời tốc độ bị giảm và ko được cộng điểm 
 
@@ -119,5 +120,7 @@ Chờ một chút rồi ấn phím bất kì hoặc kích chuột để bắt đ
 ![image](nornam.png)
 
 -**Chế độ bản giao hưởng(SYMPHONY)**
+
+     -
 
    
