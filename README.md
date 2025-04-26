@@ -148,7 +148,86 @@ Chờ một chút rồi ấn phím bất kì hoặc kích chuột để bắt đ
 
 ![image](lose.png)
 
+### Về source code game
+  -main.cpp:
+     
+      -Chứa hàm main(), khởi tạo window, renderer, và vòng lặp game chính.
+      
+      -Xử lý các sự kiện, cập nhật trạng thái game, và vẽ các thành phần lên màn hình.
+
+  -PlayGround.cpp/PlayGround.h:
+      
+      -Quản lý khu vực chơi:
+
+      -Khởi tạo lưới 20x20 ô cho màn chơi.
+
+      -Quản lý vị trí và trạng thái của các nốt nhạc (note.png, noteTarget.png, gold_note.png).
+      
+      -Xử lý các chế độ chơi (Chế độ Hướng dẫn Nốt và Chế độ Giao hưởng).
  
+      -Tạo ngẫu nhiên vị trí nốt nhạc trên lưới.
+  
+  -Snake.cpp/Snake.h:
+     
+     -Quản lý rắn:
+      
+     -Xử lý di chuyển của rắn (dùng phím mũi tên).
+
+     -Kiểm tra va chạm (với chính rắn hoặc với nốt nhạc).
+
+     -Logic ăn nốt: tăng chiều dài rắn và phát âm thanh (C.mp3, gold.mp3, ...).
+
+     -Xoay đầu rắn (snake_head.png) theo hướng di chuyển.
+
+  -AudioManager.cpp/AudioManager.h :
+  
+      -Quản lý âm thanh:
+     
+      -Tải và phát nhạc nền (music.mp3).
+      
+      -Phát âm thanh khi rắn ăn nốt nhạc (C.mp3, D.mp3, ..., gold.mp3).
+       
+      -Sử dụng SDL2_mixer để xử lý âm thanh.
+
+  -EffectManager.cpp/EffectManager.h :
+      
+      -Quản lý hiệu ứng:
+      
+      -Tạo particle khi rắn ăn nốt nhạc.
+      
+      -Xử lý các hiệu ứng hình ảnh khác (nếu có).
+      
+      -Thư mục tài nguyên (giả định: resources/):
+      
+ - tất cả tài nguyên của game:
+     
+    - Hình ảnh: snake_head.png, snake_body.png, note.png, noteTarget.png, gold_note.png, backgroundTexture.
+
+     -Âm thanh: C.mp3, D.mp3, ..., gold.mp3, music.mp3.
+
+   -Sử dụng SDL2, SDL2_image để tải và vẽ ảnh; SDL2_ttf để vẽ chữ (ví dụ: "YOU WIN", "YOU LOSE").
+   
+   Xử lý sự kiện (trong main.cpp):
+
+   Xử lý các sự kiện bàn phím:
+
+   Phím mũi tên: Điều khiển rắn (Lên, Xuống, Trái, Phải).
+
+   Phím Enter: Chơi lại khi thắng hoặc thua.
+
+   Phím Escape: Thoát game.
+
+   Quản lý trạng thái game (chuyển đổi giữa màn hình chào, màn chơi, và màn kết thúc).
+
+  Quản lý trạng thái game (trong PlayGround.cpp):
+
+  Cập nhật trạng thái game theo từng khung hình:
+  
+  Di chuyển rắn, kiểm tra va chạm, tạo nốt nhạc mới.
+ 
+ Chuyển đổi giữa các chế độ (Hướng dẫn Nốt, Giao hưởng).
+  
+  Hiển thị điểm số và thông báo kết thúc ("YOU WIN", "YOU LOSE").
        
 
    
