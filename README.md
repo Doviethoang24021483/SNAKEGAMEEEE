@@ -71,3 +71,9 @@ Nếu không muốn biên dịch, bạn có thể nhảy đến Bước 5 để 
 
 -**Lưu ý**: Nếu gặp lỗi "SDL2.dll not found" trên Windows, sao chép các file .dll (SDL2.dll, SDL2_image.dll, SDL2_ttf.dll, SDL2_mixer.dll) từ thư mục C:\SDL2\bin vào thư mục chứa file RắnSănMồi.exe.
 
+
+# 1. Bắt đầu game
+
+Chờ một chút rồi ấn phím bất kì hoặc kích chuột để bắt đầu chơi game.
+
+![image](splashscreen.png)
