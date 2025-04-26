@@ -10,10 +10,9 @@
     * [a. Cách 1: Không bao gồm code.](#a-cách-1-không-bao-gồm-code)
     * [b. Cách 2: Bao gồm code và có thể biên dịch.](#b-cách-2-bao-gồm-code-và-có-thể-biên-dịch)
 - [1. Bắt đầu game](#1bắt-đầu-game)
-- [3. Các thành phần trong game:](#3-các-thành-phần-trong-game)
-- [4. Cách chơi](#4-cách-chơi)
-- [5. Chiến thắng và thất bại](#5-chiến-thắng-và-thất-bại)
-- [Về đồ họa của game:](#về-đồ-họa-của-game)
+- [2. Các thành phần trong game:](#3-các-thành-phần-trong-game)
+- [3. Cách chơi](#4-cách-chơi)
+- [4. Chiến thắng và thất bại](#5-chiến-thắng-và-thất-bại)
 - [Về source code game](#về-source-code-game)
 
  # 0. Cách tải game
