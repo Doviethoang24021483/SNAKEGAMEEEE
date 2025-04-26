@@ -22,8 +22,10 @@ Trong **MUSICAL SNAKE**, bạn sẽ điều khiển một con rắn di chuyển 
 ### 1. Chuẩn bị môi trường
 
 #### Yêu cầu
-- Trình biên dịch C++: `g++` (MinGW cho Windows, GCC cho Linux/Mac).  
-- Thư viện SDL2:  
+
+- **Trình biên dịch C++**:  
+  - `g++` (MinGW cho Windows, GCC cho Linux/Mac).  
+- **Thư viện SDL2**:  
   - `SDL2`  
   - `SDL2_image`  
   - `SDL2_ttf`  
@@ -32,7 +34,7 @@ Trong **MUSICAL SNAKE**, bạn sẽ điều khiển một con rắn di chuyển 
 #### Cài đặt SDL2
 
 - **Ubuntu/Linux**:  
-  - Cài đặt các thư viện SDL2:  
+  - **Cài đặt các thư viện SDL2**:  
     ```bash
     sudo apt-get update
     sudo apt-get install g++ libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev
@@ -49,7 +51,8 @@ SDL2_image-devel-*.zip (SDL2_image).
 SDL2_ttf-devel-*.zip (SDL2_ttf).
 SDL2_mixer-devel-*.zip (SDL2_mixer).
 Giải nén và đặt vào một thư mục, ví dụ: C:\SDL2.
-Cấu hình MinGW: Đảm bảo g++ đã được cài đặt (tải từ MinGW).
+Cấu hình MinGW:
+Đảm bảo g++ đã được cài đặt (tải từ MinGW).
 Thêm đường dẫn C:\SDL2\bin vào biến môi trường Path để chạy file thực thi.
 macOS:
 Sử dụng Homebrew để cài đặt:
@@ -65,9 +68,11 @@ Sao chép
 git clone https://github.com/DovietHoang24021483/SNAKEGAMEEEE.git
 cd SNAKEGAMEEEE
 Lưu ý:
-Đảm bảo tất cả file tài nguyên (hình ảnh: snake_head.png, note.png, ...; âm thanh: C.mp3, music.mp3, ...) đã được tải về cùng mã nguồn. Các file này nằm trong thư mục gốc của repository.
+Đảm bảo tất cả file tài nguyên (hình ảnh: snake_head.png, note.png, ...; âm thanh: C.mp3, music.mp3, ...) đã được tải về cùng mã nguồn.
+Các file này nằm trong thư mục gốc của repository.
 3. Biên dịch mã nguồn
-Biên dịch game bằng g++. Sử dụng lệnh phù hợp với hệ điều hành của bạn:
+Biên dịch game bằng g++:
+Sử dụng lệnh phù hợp với hệ điều hành của bạn:
 Ubuntu/Linux hoặc macOS (nếu SDL2 cài đặt toàn cục):
 bash
 
@@ -96,7 +101,6 @@ Sao chép
 RắnSănMồi.exe
 Lưu ý:
 Nếu gặp lỗi "SDL2.dll not found" trên Windows, sao chép file SDL2.dll, SDL2_image.dll, SDL2_ttf.dll, SDL2_mixer.dll từ thư mục C:\SDL2\bin vào thư mục chứa file RắnSănMồi.exe.
-
 ## Cách chơi
 
 - **Điều khiển**:
