@@ -138,6 +138,11 @@ Chờ một chút rồi ấn phím bất kì hoặc kích chuột để bắt đ
 
 ![image](phaobong2.png)
 
+# 5. Chiến thắng và thất bại
+
+-**Chiến thắng** : Game win khi người chơi chinh phục được đủ 20 note nhạc ở chế độ bản giao hưởng 
+
+![image](
  
        
 
