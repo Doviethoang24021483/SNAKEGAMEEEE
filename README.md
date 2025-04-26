@@ -142,7 +142,12 @@ Chờ một chút rồi ấn phím bất kì hoặc kích chuột để bắt đ
 
 -**Chiến thắng** : Game win khi người chơi chinh phục được đủ 20 note nhạc ở chế độ bản giao hưởng 
 
-![image](
+![image](winn.png)
+
+-**Thua cuộc** : Thua khi rắn đâm vào tường hoặc vào thân 
+
+![image](lose.png)
+
  
        
 
