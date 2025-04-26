@@ -97,4 +97,4 @@ Chờ một chút rồi ấn phím bất kì hoặc kích chuột để bắt đ
 
 -Note nhac vàng : Trong chế độ bản giao hưởng ăn mỗi lần được cộng 100 điểm 
  
- ![image](goldNote.png)
+ ![image](gold_note.png)
