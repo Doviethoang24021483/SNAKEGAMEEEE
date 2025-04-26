@@ -76,28 +76,7 @@ Nếu không muốn biên dịch, bạn có thể nhảy đến Bước 5 để 
 # 1. Bắt đầu game
 
 Chờ một chút rồi click vào nút “CLICK TO START!” để bắt đầu chơi game.
-![image](
-
-![ezgif com-video-to-gif](resources/preview/loading.gif)
-
-</div>
+![image](splashscreen.png)
 
 
-Khi vào game lần đầu, người chơi hãy nhập tên mình để bắt đầu trò chơi. Sau đó click “OK” hoặc nhấn phím Enter để tiếp
-tục.
-
-<div style="text-align: center;">
-
-![image](resources/preview/name.png)
-
-</div>
-
-
-
-Và người chơi sẽ ngay lập tức nhận được 1 cây đầu tiên - Peashooter
-<div style="text-align: center;">
-
-![image](resources/preview/first_plant.png)
-
-</div>
 
