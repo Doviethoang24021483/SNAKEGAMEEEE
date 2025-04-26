@@ -101,5 +101,5 @@ Chờ một chút rồi ấn phím bất kì hoặc kích chuột để bắt đ
 
  -BackGround nhẹ nhàng , thanh thoát , mang tính giải stress khi hòa cùng âm nhạc đong thời màu nhẹ giúp làm nổi nốt nhạc và rắn 
 
-![image](background.png)
+![image](Screenshot 2025-04-26 240143.png)
 
