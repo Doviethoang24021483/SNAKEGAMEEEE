@@ -116,7 +116,7 @@ Chờ một chút rồi ấn phím bất kì hoặc kích chuột để bắt đ
 
      -Hình ảnh sơ bộ chế độ thường 
 
-     ![image](
+![image](nornam.png)
 
 -**Chế độ bản giao hưởng(SYMPHONY)**
 
