@@ -2,7 +2,7 @@
 
 # MUSICAL SNAKE
 
-- VIDEO DEMO GAME MUSICAL SNAKE: [video](https://drive.google.com/file/d/1SJJjfO1ky3_pscMocCVaDnSrGC5NMzTe/view?usp=drive_link)
+- # VIDEO DEMO GAME MUSICAL SNAKE: [video](https://drive.google.com/file/d/1SJJjfO1ky3_pscMocCVaDnSrGC5NMzTe/view?usp=drive_link)
 # Giới thiệu game
 **MUSICAL SNAKE** là một tựa game arcade đầy sáng tạo, nơi âm nhạc và gameplay hòa quyện để mang đến trải nghiệm giải trí độc đáo! Được phát triển bằng C++ và thư viện SDL2, game là phiên bản nâng cấp của Snake cổ điển, đưa bạn vào hành trình điều khiển chú rắn trên lưới 20x20 ô để "săn" các nốt nhạc. Không chỉ đơn thuần là ăn mồi, bạn sẽ được đắm mình trong các giai điệu sống động, vượt qua những thử thách ở Chế độ Hướng dẫn Nốt, và chinh phục Chế độ Giao hưởng để thu thập 20 nốt vàng trong 30 giây kịch tính. Với đồ họa bắt mắt, hiệu ứng mượt mà, và âm thanh cuốn hút, **MUSICAL SNAKE** hứa hẹn sẽ làm bạn không thể rời mắt!
 
