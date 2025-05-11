@@ -97,7 +97,7 @@ Chờ một chút rồi ấn phím bất kì hoặc kích chuột để bắt đ
      
      - Cố gắng ăn nốt đúng thứ tứ ( nốt đang rung ) để có cơ hội tích lũy đủ chuỗi nốt 5 nốt nhạc để vào được bản giao hưởng
 
-     - Ăn đúng nốt nhạc rắn sẽ dài ra , đồng thời phát âm thanh của note nhạc đó , vằ được cộng thêm 10 điểm và bắn pháo hoa màu vàng
+     - Ăn đúng nốt nhạc rắn sẽ dài ra , đồng thời phát âm thanh của note nhạc đó , và được cộng thêm 10 điểm và bắn pháo hoa màu vàng
 
 ![image](phaobong.png)
 
