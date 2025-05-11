@@ -10,7 +10,7 @@
 - [2. Các thành phần trong game:](#3-các-thành-phần-trong-game)
 - [3. Cách chơi](#4-cách-chơi)
 - [4. Chiến thắng và thất bại](#5-chiến-thắng-và-thất-bại)
-- [Về source code game](#về-source-code-game)
+- [5. Về source code game](#về-source-code-game)
 
  # 0. Cách tải game:
 
@@ -123,7 +123,7 @@ Chờ một chút rồi ấn phím bất kì hoặc kích chuột để bắt đ
 
 ![image](phaobong2.png)
 
-# 5. Chiến thắng và thất bại
+# 4. Chiến thắng và thất bại
 
 -**Chiến thắng** : Game win khi người chơi chinh phục được đủ 20 note nhạc ở chế độ bản giao hưởng 
 
@@ -133,7 +133,7 @@ Chờ một chút rồi ấn phím bất kì hoặc kích chuột để bắt đ
 
 ![image](lose.png)
 
-### Về source code game
+# 5. Về source code game
   -main.cpp:
      
       -Chứa hàm main(), khởi tạo window, renderer, và vòng lặp game chính.
@@ -188,9 +188,9 @@ Chờ một chút rồi ấn phím bất kì hoặc kích chuột để bắt đ
      
     - Hình ảnh: snake_head.png, snake_body.png, note.png, noteTarget.png, gold_note.png, backgroundTexture.
 
-     -Âm thanh: C.mp3, D.mp3, ..., gold.mp3, music.mp3.
+    - Âm thanh: C.mp3, D.mp3, ..., gold.mp3, music.mp3.
 
-   -Sử dụng SDL2, SDL2_image để tải và vẽ ảnh; SDL2_ttf để vẽ chữ (ví dụ: "YOU WIN", "YOU LOSE").
+    - Sử dụng SDL2, SDL2_image để tải và vẽ ảnh; SDL2_ttf để vẽ chữ (ví dụ: "YOU WIN", "YOU LOSE").
    
    Xử lý sự kiện (trong main.cpp):
 
@@ -204,15 +204,15 @@ Chờ một chút rồi ấn phím bất kì hoặc kích chuột để bắt đ
 
    Quản lý trạng thái game (chuyển đổi giữa màn hình chào, màn chơi, và màn kết thúc).
 
-  Quản lý trạng thái game (trong PlayGround.cpp):
+   Quản lý trạng thái game (trong PlayGround.cpp):
 
-  Cập nhật trạng thái game theo từng khung hình:
+   Cập nhật trạng thái game theo từng khung hình:
   
-  Di chuyển rắn, kiểm tra va chạm, tạo nốt nhạc mới.
+   Di chuyển rắn, kiểm tra va chạm, tạo nốt nhạc mới.
  
- Chuyển đổi giữa các chế độ (Hướng dẫn Nốt, Giao hưởng).
+   Chuyển đổi giữa các chế độ (Hướng dẫn Nốt, Giao hưởng).
   
-  Hiển thị điểm số và thông báo kết thúc ("YOU WIN", "YOU LOSE").
+   Hiển thị điểm số và thông báo kết thúc ("YOU WIN", "YOU LOSE").
        
 
    
